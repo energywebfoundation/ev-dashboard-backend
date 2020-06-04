@@ -4,9 +4,7 @@
 
 This repository is an entrypoint to the different components that are part of the Flex suite:
 
-- [flex-backend](https://github.com/energywebfoundation/flex-backend)
-- [flex-frontend](https://github.com/energywebfoundation/flex-frontend)
-- [flex-device](https://github.com/energywebfoundation/flex-device)
+This backend is serving the [flex-frontend](https://github.com/energywebfoundation/flex-frontend).
 
 ## Maintainers
 **Primary**: Mani Hagh Sefat (@manihagh)
