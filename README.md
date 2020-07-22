@@ -7,7 +7,7 @@ This repository is an entrypoint to the different components that are part of th
 This backend is serving the [flex-frontend](https://github.com/energywebfoundation/flex-frontend).
 
 ## Maintainers
-**Primary**: Mani Hagh Sefat (@manihagh)
+**Primary**: Mani H. (@manihagh)
 
 ## Getting Started
 
@@ -46,8 +46,8 @@ Please import this initial data in respective db source (MemoryDataSource, Redis
 
 Main step to update repository file located in src/repositories with correct datasource 
 
-example :
-
+Set datasource provider example:
+```
  constructor(
     @inject('datasources.memory') dataSource: MemoryDataSource, @repository.getter('OfferRepository') protected offerRepositoryGetter: Getter<OfferRepository>,
   ) {
@@ -55,11 +55,14 @@ example :
     this.offer = this.createBelongsToAccessorFor('offer', offerRepositoryGetter,);
     this.registerInclusionResolver('offer', this.offer.inclusionResolver);
   }
+```
 
-Available db source
+Available datasources:
+```
     - @inject('datasources.memory') dataSource: MemoryDataSource
     - @inject('datasources.pgsql') dataSource: PgsqlDataSource
     - @inject('datasources.redis') dataSource: RedisDataSource
+```
 
 ## How to Run
 
