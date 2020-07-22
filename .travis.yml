@@ -1,0 +1,13 @@
+sudo: required
+language: node_js
+dist: xenial
+node_js:
+  - '10.17.0'
+install:
+  - npm install
+  - npm run clean
+  - npm run build
+
+script:
+  - echo "skipping tests" 
+

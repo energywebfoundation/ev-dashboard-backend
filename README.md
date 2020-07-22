@@ -4,9 +4,7 @@
 
 This repository is an entrypoint to the different components that are part of the Flex suite:
 
-- [flex-backend](https://github.com/energywebfoundation/flex-backend)
-- [flex-frontend](https://github.com/energywebfoundation/flex-frontend)
-- [flex-device](https://github.com/energywebfoundation/flex-device)
+This backend is serving the [flex-frontend](https://github.com/energywebfoundation/flex-frontend).
 
 ## Maintainers
 **Primary**: Mani Hagh Sefat (@manihagh)
@@ -20,24 +18,66 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-Give examples
+NodeJS v10
+NPM v6+
 ```
 
-### Installing
+## DB configuration
 
-A step by step series of examples that tell you how to get a development env running
+Currently 3 type of db configuration is provided
+    1. In-memory (default)
+        - configure file are located at src/datasources/memory.datasource.ts
+    2. Postgres
+        - configure file are located at sample/datasources/pgsql.datasource.ts && sample/datasources/pgsql.datasource.config.json
+          copy both files to src/datasources/
+    3. Redis
+        - configure file are located at sample/datasources/redis.datasource.ts && sample/datasources/redis.datasource.config.json
+          copy both files to src/datasources/
 
-Say what the step will be
+All types of datasource providers require initial data to be setup
+    1. In-memory (default)
+        - initial file are located at inMemoryDB_EWFlex.json
+    2. Postgres
+        - initial file are located at ew-flex.sql
+    3. Redis
+        - initial file are located at redis-based-data.txt
 
-```
-Give the example
-```
+Please import this initial data in respective db source (MemoryDataSource, RedisDataSource, PgsqlDataSource).
 
-And repeat
-:
-```
-until finished
-```
+Main step to update repository file located in src/repositories with correct datasource 
+
+example :
+
+ constructor(
+    @inject('datasources.memory') dataSource: MemoryDataSource, @repository.getter('OfferRepository') protected offerRepositoryGetter: Getter<OfferRepository>,
+  ) {
+    super(ActivationSummary, dataSource);
+    this.offer = this.createBelongsToAccessorFor('offer', offerRepositoryGetter,);
+    this.registerInclusionResolver('offer', this.offer.inclusionResolver);
+  }
+
+Available db source
+    - @inject('datasources.memory') dataSource: MemoryDataSource
+    - @inject('datasources.pgsql') dataSource: PgsqlDataSource
+    - @inject('datasources.redis') dataSource: RedisDataSource
+
+## How to Run
+
+Run `npm i` to install dependencies.
+
+Run `npm run build` to build the project.
+
+Run `npm run start` to start your server.
+
+Open your browser and navigate to  `http://localhost:8080/`.
+
+## Docker
+
+Docker compose is used for the development environment only. Installing dependencies, watchting for changes and rebuiling the app is taken care of.
+
+Copy `.env.template` to `.env` and set UID and GID accoring to your host system.
+
+Then execute: `docker-compose up --build`
 
 End with an example of getting some data out of the system or using it for a little demo
 

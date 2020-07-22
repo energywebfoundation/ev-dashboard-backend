@@ -1,0 +1,36 @@
+{
+  "ids": {
+    "Offer": 1,
+    "Claim": 1,
+    "Asset": 1,
+    "ActivationSummary": 1,
+    "OfferBundle": 1,
+    "Constraints": 1,
+    "Participant": 1,
+    "OfferState": 8,
+    "OfferBundleState": 4
+  },
+  "models": {
+    "Offer": {},
+    "Claim": {},
+    "Asset": {},
+    "ActivationSummary": {},
+    "OfferBundle": {},
+    "Constraints": {},
+    "Participant": {},
+    "OfferState": {
+      "1": "{\"name\":\"Pending\",\"claimtypeid\":0,\"id\":1}",
+      "2": "{\"name\":\"Pending Confirm\",\"claimtypeid\":0,\"id\":2}",
+      "3": "{\"name\":\"Pending Submit\",\"claimtypeid\":0,\"id\":3}",
+      "4": "{\"name\":\"Pending Activation\",\"claimtypeid\":0,\"id\":4}",
+      "5": "{\"name\":\"Confirm\",\"claimtypeid\":0,\"id\":5}",
+      "6": "{\"name\":\"Reserved\",\"claimtypeid\":0,\"id\":6}",
+      "7": "{\"name\":\"Activation\",\"claimtypeid\":0,\"id\":7}"
+    },
+    "OfferBundleState": {
+      "1": "{\"name\":\"Rejected\",\"id\":1}",
+      "2": "{\"name\":\"Reserved\",\"id\":2}",
+      "3": "{\"name\":\"Accepted\",\"id\":3}"
+    }
+  }
+}
