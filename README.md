@@ -25,22 +25,22 @@ NPM v6+
 ## DB configuration
 
 Currently 3 type of db configuration is provided
-    1. In-memory (default)
-        - configure file are located at src/datasources/memory.datasource.ts
-    2. Postgres
-        - configure file are located at sample/datasources/pgsql.datasource.ts && sample/datasources/pgsql.datasource.config.json
-          copy both files to src/datasources/
-    3. Redis
-        - configure file are located at sample/datasources/redis.datasource.ts && sample/datasources/redis.datasource.config.json
-          copy both files to src/datasources/
+1. In-memory (default)
+    - configure file are located at src/datasources/memory.datasource.ts
+2. Postgres
+    - configure file are located at sample/datasources/pgsql.datasource.ts && sample/datasources/pgsql.datasource.config.json
+        copy both files to src/datasources/
+3. Redis
+    - configure file are located at sample/datasources/redis.datasource.ts && sample/datasources/redis.datasource.config.json
+        copy both files to src/datasources/
 
 All types of datasource providers require initial data to be setup
-    1. In-memory (default)
-        - initial file are located at inMemoryDB_EWFlex.json
-    2. Postgres
-        - initial file are located at ew-flex.sql
-    3. Redis
-        - initial file are located at redis-based-data.txt
+1. In-memory (default)
+    - initial file are located at inMemoryDB_EWFlex.json
+2. Postgres
+    - initial file are located at ew-flex.sql
+3. Redis
+    - initial file are located at redis-based-data.txt
 
 Please import this initial data in respective db source (MemoryDataSource, RedisDataSource, PgsqlDataSource).
 
