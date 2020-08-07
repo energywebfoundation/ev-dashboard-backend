@@ -1,7 +1,8 @@
 import {Entity, model, property} from '@loopback/repository';
+import { IEndpoint } from '@shareandcharge/ocn-bridge/dist/models/ocpi/common';
 
 @model()
-export class OcpiEndpoint extends Entity {
+export class OcpiEndpoint extends Entity implements IEndpoint {
   @property({
     type: 'number',
     id: true,

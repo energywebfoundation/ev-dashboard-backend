@@ -20,14 +20,28 @@ export class OcnBridgeDbProvider {
                 return connection?.tokenB;
             },
             setTokenB: async (tokenB: string) => {
-                await this.ocnConnectionRepository.save(new OcnConnection({ id: 1, tokenB}))
+                const existent = await this.ocnConnectionRepository.find()
+                console.log('existent:', existent)
+                if (existent[0]) {
+                    console.log('replacing')
+                    await this.ocnConnectionRepository.replaceById(1, Object.assign(existent[0], {tokenB}))
+                } else {
+                    console.log('saving')
+                    await this.ocnConnectionRepository.create(new OcnConnection({ tokenB}))
+                }
             },
             getTokenC: async () => {
                 const connection = await this.ocnConnectionRepository.findById(1, {fields: {tokenC: true}})
                 return connection?.tokenC;
             },
             setTokenC: async (tokenC: string) => {
-                await this.ocnConnectionRepository.save(new OcnConnection({ id: 1, tokenC}))
+                const existent = await this.ocnConnectionRepository.find()
+                if (existent[0]) {
+                    await this.ocnConnectionRepository.replaceById(1, Object.assign(existent[0], {tokenC}))
+                } else {
+                    await this.ocnConnectionRepository.save(new OcnConnection({ id: 1, tokenC}))
+                }
+
             },
             getEndpoint: async (identifier: string, role: string) => {
                 const endpoint = await this.ocpiEndpointRepository.findOne({
