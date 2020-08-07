@@ -21,12 +21,9 @@ export class OcnBridgeDbProvider {
             },
             setTokenB: async (tokenB: string) => {
                 const existent = await this.ocnConnectionRepository.find()
-                console.log('existent:', existent)
                 if (existent[0]) {
-                    console.log('replacing')
                     await this.ocnConnectionRepository.replaceById(1, Object.assign(existent[0], {tokenB}))
                 } else {
-                    console.log('saving')
                     await this.ocnConnectionRepository.create(new OcnConnection({ tokenB}))
                 }
             },

@@ -1,6 +1,6 @@
-import { OcnBridgeDbProvider } from "../../providers/ocn-bridge-db.provider"
+import { OcnBridgeDbProvider } from "../../providers"
 import { OcnConnectionRepository, OcpiEndpointRepository } from '../../repositories'
-import { testdb } from '../test.datasrouce'
+import { testdb } from '../test.datasource'
 import { assert } from 'chai'
 import { OcnConnection, OcpiEndpoint } from '../../models'
 

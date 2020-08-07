@@ -1,8 +1,8 @@
 import {Entity, model, property} from '@loopback/repository';
-import { ICdrToken, IPrice, IChargingPeriod } from '@shareandcharge/ocn-bridge/dist/models/ocpi/session';
+import { ICdrToken, IPrice, IChargingPeriod, ISession, authMethod, sessionStatus } from '@shareandcharge/ocn-bridge/dist/models/ocpi/session';
 
 @model()
-export class OcpiSession extends Entity {
+export class OcpiSession extends Entity implements ISession {
   @property({
     type: 'number',
     id: true,
@@ -55,7 +55,7 @@ export class OcpiSession extends Entity {
     type: 'string',
     required: true,
   })
-  auth_method: string;
+  auth_method: authMethod;
 
   @property({
     type: 'string',
@@ -105,7 +105,7 @@ export class OcpiSession extends Entity {
     type: 'string',
     required: true,
   })
-  status: string;
+  status: sessionStatus;
 
   @property({
     type: 'date',
