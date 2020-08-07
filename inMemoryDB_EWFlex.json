@@ -8,7 +8,13 @@
     "Constraints": 1,
     "Participant": 1,
     "OfferState": 8,
-    "OfferBundleState": 4
+    "OfferBundleState": 4,
+    "OcnConnection": 1,
+    "OcpiEndpoint": 1,
+    "OcpiToken": 1,
+    "OcpiLocation": 1,
+    "OcpiSession": 1,
+    "OcpiCdr": 1
   },
   "models": {
     "Offer": {},
@@ -31,6 +37,12 @@
       "1": "{\"name\":\"Rejected\",\"id\":1}",
       "2": "{\"name\":\"Reserved\",\"id\":2}",
       "3": "{\"name\":\"Accepted\",\"id\":3}"
-    }
+    },
+    "OcnConnection": {},
+    "OcpiEndpoint": {},
+    "OcpiToken": {},
+    "OcpiLocation": {},
+    "OcpiSession": {},
+    "OcpiCdr": {}
   }
 }

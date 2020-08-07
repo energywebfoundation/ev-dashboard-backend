@@ -15,9 +15,9 @@ if (require.main === module) {
     },
     socket: {
       port: +(process.env.PORT || 8081),
-      host: process.env.HOST,      
-      
-    }
+      host: process.env.HOST,       
+    },
+    ocn: true
   };
   application.main(config).catch(err => {
     console.error('Cannot start the application.', err);
