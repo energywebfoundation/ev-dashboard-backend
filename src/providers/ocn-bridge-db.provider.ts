@@ -17,17 +17,20 @@ export class OcnBridgeDbProvider {
   value(): IPluggableDB {
     return {
       getTokenB: async () => {
-        const connection = await this.ocnConnectionRepository.findById(1, {
+        const connection = await this.ocnConnectionRepository.findOne({
+          where: {id: 1},
           fields: {tokenB: true},
         });
-        return connection?.tokenB;
+        return connection?.tokenB || '';
       },
       setTokenB: async (tokenB: string) => {
-        const existent = await this.ocnConnectionRepository.find();
-        if (existent[0]) {
+        const existent = await this.ocnConnectionRepository.findOne({
+          where: {id: 1},
+        });
+        if (existent) {
           await this.ocnConnectionRepository.replaceById(
             1,
-            Object.assign(existent[0], {tokenB}),
+            Object.assign(existent, {tokenB}),
           );
         } else {
           await this.ocnConnectionRepository.create(
@@ -36,17 +39,20 @@ export class OcnBridgeDbProvider {
         }
       },
       getTokenC: async () => {
-        const connection = await this.ocnConnectionRepository.findById(1, {
+        const connection = await this.ocnConnectionRepository.findOne({
+          where: {id: 1},
           fields: {tokenC: true},
         });
-        return connection?.tokenC;
+        return connection?.tokenC || '';
       },
       setTokenC: async (tokenC: string) => {
-        const existent = await this.ocnConnectionRepository.find();
-        if (existent[0]) {
+        const existent = await this.ocnConnectionRepository.findOne({
+          where: {id: 1},
+        });
+        if (existent) {
           await this.ocnConnectionRepository.replaceById(
             1,
-            Object.assign(existent[0], {tokenC}),
+            Object.assign(existent, {tokenC}),
           );
         } else {
           await this.ocnConnectionRepository.save(

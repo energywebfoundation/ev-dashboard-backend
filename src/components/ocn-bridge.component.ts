@@ -42,7 +42,7 @@ export class OcnBridgeComponent implements Component {
       pluggableDB: dbProvider.value(),
       pluggableRegistry: new DefaultRegistry('local'),
       logger: true,
-      signatures: true,
+    //   signatures: true,
       dryRun: false,
     };
   }
