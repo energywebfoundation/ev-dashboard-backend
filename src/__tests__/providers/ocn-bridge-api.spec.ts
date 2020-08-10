@@ -2,18 +2,19 @@ import { OcpiSessionRepository, OcpiCdrRepository } from '../../repositories'
 import { testdb } from '../test.datasource'
 import { assert } from 'chai'
 import { OcnBridgeApiProvider } from '../../providers'
-import { OcpiSession } from '../../models'
+import { expectedSessionData, expectedCdrData } from './ocn-bridge-api.data'
+import { IPluggableAPI } from '@shareandcharge/ocn-bridge'
 
 describe('OcnBridgeApiProvider', () => {
 
     let sessionRepo: OcpiSessionRepository
     let cdrRepo: OcpiCdrRepository
-    let provider: OcnBridgeApiProvider
+    let api: IPluggableAPI
 
     beforeEach(async () => {
         sessionRepo = new OcpiSessionRepository(testdb)
         cdrRepo = new OcpiCdrRepository(testdb)
-        provider = new OcnBridgeApiProvider(sessionRepo, cdrRepo)
+        api = new OcnBridgeApiProvider(sessionRepo, cdrRepo).value()
     })
 
     afterEach(async () => {
@@ -22,47 +23,50 @@ describe('OcnBridgeApiProvider', () => {
     })
 
     it('should provide PluggableAPI', () => {
-        const api = provider.value()
         assert.hasAllKeys(api, ['sessions', 'cdrs',])
         assert.hasAllKeys(api.sessions?.receiver, ['update'])
         assert.hasAllKeys(api.cdrs?.receiver, ['get', 'create'])
     })
 
     it('should create session', async () => {
-        const api = provider.value()
-        const expected = new OcpiSession({
-            country_code: 'CA',
-            party_id: 'ELC',
-            id: '0102030405',
-            start_date_time: new Date().toISOString(),
-            kwh: 1.2,
-            cdr_token: {
-                uid: '9999',
-                type: 'RFID',
-                contract_id: 'CA-ELC-XX99990'
-            },
-            auth_method: 'WHITELIST',
-            location_id: '0145',
-            evse_uid: 'XY-777',
-            connector_id: '1',
-            currency: 'CAD',
-            status: 'ACTIVE',
-            last_updated: new Date().toISOString()
-        })
-        await api.sessions?.receiver?.update(expected)
-
-        const actual = await sessionRepo.findOne({where: {id: expected.id}})
-        assert.deepEqual(actual?.kwh, expected.kwh)
+        await api.sessions?.receiver?.update(expectedSessionData)
+        const actual = await sessionRepo.findOne({where: {id: expectedSessionData.id}})
+        assert.equal(actual?.kwh, expectedSessionData.kwh)
     })
 
     it('should update session', async () => {
-        throw Error('not implemented!')
+        await api.sessions?.receiver?.update(expectedSessionData)
+        expectedSessionData.kwh += 0.5
+        await api.sessions?.receiver?.update(expectedSessionData)
+        const actual = await sessionRepo.findOne({where: {id: expectedSessionData.id}})
+        assert.equal(actual?.kwh, expectedSessionData.kwh)
     })
+
     it('should create cdr', async () => {
-        throw Error('not implemented')
+        await api.cdrs?.receiver?.create(expectedCdrData)
+        const actual = await api.cdrs?.receiver?.get(expectedCdrData.id)
+        assert.equal(actual?.total_energy, expectedCdrData.total_energy)
     })
+    
     it('should not allow cdr overwrite', async () => {
-        throw Error('not implemented')
+        await api.cdrs?.receiver?.create(expectedCdrData)
+        expectedCdrData.total_energy += 0.5
+        try {
+            await api.cdrs?.receiver?.create(expectedCdrData)
+            assert.fail('expected statement to throw error')
+        } catch (e) {
+            assert.equal(e.message, 'Cdr already exists.')
+        }
+    })
+
+    it('should throw error if no cdr found', async () => {
+        try {
+            await api.cdrs?.receiver?.get('some-id')
+            assert.fail('expected statement to throw error')
+        } catch (e) {
+            assert.equal(e.message, 'No cdr with id=some-id found.')
+        }
+
     })
 
 })
