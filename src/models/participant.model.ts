@@ -1,11 +1,11 @@
-import { Entity, model, property, belongsTo } from '@loopback/repository';
-import { ParticipantType } from './participant-type.model';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {ParticipantType} from './participant-type.model';
 
 @model()
 export class Participant extends Entity {
   @property({
     type: 'number',
-    id: true
+    id: true,
   })
   id?: number;
 
@@ -38,7 +38,6 @@ export class Participant extends Entity {
     type: 'string',
   })
   meteringAddress?: string;
-
 
   @belongsTo(() => ParticipantType)
   participantTypeId: number;

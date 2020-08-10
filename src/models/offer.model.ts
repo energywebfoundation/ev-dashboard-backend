@@ -1,20 +1,24 @@
-import { Entity, model, property, belongsTo, hasOne } from '@loopback/repository';
-import { DeliveryWindow } from './delivery-window.model';
-import { OfferState, OfferStateRelations } from './offer-state.model';
-import { Asset } from './asset.model';
-import { Participant } from './participant.model';
-import { OfferBundle, OfferBundleRelations, OfferBundleWithRelations } from './offer-bundle.model';
+import {Entity, model, property, belongsTo, hasOne} from '@loopback/repository';
+import {DeliveryWindow} from './delivery-window.model';
+import {OfferState, OfferStateRelations} from './offer-state.model';
+import {Asset} from './asset.model';
+import {Participant} from './participant.model';
+import {
+  OfferBundle,
+  OfferBundleRelations,
+  OfferBundleWithRelations,
+} from './offer-bundle.model';
 import {ActivationSummary} from './activation-summary.model';
 
 @model({
-  name: 'Offer'
+  name: 'Offer',
 })
 export class Offer extends Entity {
   @property({
     type: 'number',
     id: true,
     generated: false,
-    index:true
+    index: true,
   })
   id?: number;
 
@@ -27,14 +31,14 @@ export class Offer extends Entity {
   @property({
     type: 'number',
     required: true,
-    index:true
+    index: true,
   })
   offerType: number;
 
   @property({
     type: 'date',
     required: true,
-    default: () => new Date()
+    default: () => new Date(),
   })
   created: string;
 
@@ -47,7 +51,7 @@ export class Offer extends Entity {
   @property({
     type: 'string',
     required: false,
-    index:true
+    index: true,
   })
   offerId: string;
 
@@ -60,7 +64,7 @@ export class Offer extends Entity {
   @property({
     type: 'number',
     required: true,
-    index:true
+    index: true,
   })
   price: number;
 
@@ -73,26 +77,41 @@ export class Offer extends Entity {
 
   @belongsTo(() => DeliveryWindow)
   deliveryWindowId: number;
-  
-  
-  @belongsTo(() => OfferState,{},{
-    index: true
-  })
+
+  @belongsTo(
+    () => OfferState,
+    {},
+    {
+      index: true,
+    },
+  )
   offerStateId: number;
 
-  @belongsTo(() => Asset,{},{
-    index: true
-  })
+  @belongsTo(
+    () => Asset,
+    {},
+    {
+      index: true,
+    },
+  )
   assetId: number;
 
-  @belongsTo(() => Participant,{},{
-    index: true
-  })
+  @belongsTo(
+    () => Participant,
+    {},
+    {
+      index: true,
+    },
+  )
   ownerId: number;
 
-  @belongsTo(() => OfferBundle,{},{
-    index:true
-  })
+  @belongsTo(
+    () => OfferBundle,
+    {},
+    {
+      index: true,
+    },
+  )
   offerBundleId: number;
 
   @belongsTo(() => ActivationSummary)

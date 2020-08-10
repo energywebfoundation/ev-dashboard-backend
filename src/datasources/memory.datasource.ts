@@ -1,10 +1,15 @@
-import {inject, lifeCycleObserver, LifeCycleObserver, ValueOrPromise} from '@loopback/core';
+import {
+  inject,
+  lifeCycleObserver,
+  LifeCycleObserver,
+  ValueOrPromise,
+} from '@loopback/core';
 import {juggler} from '@loopback/repository';
 
 const config = {
   name: 'memory',
   connector: 'memory',
-  file: 'inMemoryDB_EWFlex.json'
+  file: 'inMemoryDB_EWFlex.json',
 };
 
 // Observe application's life cycle to disconnect the datasource when

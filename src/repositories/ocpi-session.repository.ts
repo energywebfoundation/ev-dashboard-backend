@@ -8,9 +8,7 @@ export class OcpiSessionRepository extends DefaultCrudRepository<
   typeof OcpiSession.prototype._id,
   OcpiSessionRelations
 > {
-  constructor(
-    @inject('datasources.memory') dataSource: MemoryDataSource,
-  ) {
+  constructor(@inject('datasources.memory') dataSource: MemoryDataSource) {
     super(OcpiSession, dataSource);
   }
 }

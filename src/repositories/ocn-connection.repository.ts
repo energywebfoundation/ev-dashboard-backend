@@ -8,10 +8,7 @@ export class OcnConnectionRepository extends DefaultCrudRepository<
   typeof OcnConnection.prototype.id,
   OcnConnectionRelations
 > {
-  constructor(
-    @inject('datasources.memory') dataSource: MemoryDataSource,
-  ) {
+  constructor(@inject('datasources.memory') dataSource: MemoryDataSource) {
     super(OcnConnection, dataSource);
   }
-
 }

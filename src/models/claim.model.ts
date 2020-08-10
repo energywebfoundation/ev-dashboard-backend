@@ -1,18 +1,18 @@
-import { Entity, model, property, belongsTo } from '@loopback/repository';
-import { ClaimType } from './claim-type.model';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {ClaimType} from './claim-type.model';
 
 @model()
 export class Claim extends Entity {
   @property({
     type: 'number',
-    id: true
+    id: true,
   })
   id?: number;
 
   @property({
     type: 'string',
     required: false,
-    index:true
+    index: true,
   })
   ownerId: string;
 
@@ -30,19 +30,19 @@ export class Claim extends Entity {
   @property({
     type: 'string',
     required: false,
-    default: ""
+    default: '',
   })
   claimUrl: string;
 
   @property({
     type: 'boolean',
-    default: false
+    default: false,
   })
   isRejected: string;
 
   @property({
     type: 'boolean',
-    default: false
+    default: false,
   })
   isServicePoint?: boolean;
 

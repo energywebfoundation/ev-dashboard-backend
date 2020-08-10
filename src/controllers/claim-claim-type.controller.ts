@@ -1,22 +1,13 @@
-import {
-  repository,
-} from '@loopback/repository';
-import {
-  param,
-  get,
-  getModelSchemaRef,
-} from '@loopback/rest';
-import {
-  Claim,
-  ClaimType,
-} from '../models';
+import {repository} from '@loopback/repository';
+import {param, get, getModelSchemaRef} from '@loopback/rest';
+import {Claim, ClaimType} from '../models';
 import {ClaimRepository} from '../repositories';
 
 export class ClaimClaimTypeController {
   constructor(
     @repository(ClaimRepository)
     public claimRepository: ClaimRepository,
-  ) { }
+  ) {}
 
   @get('/claims/{id}/claim-type', {
     responses: {

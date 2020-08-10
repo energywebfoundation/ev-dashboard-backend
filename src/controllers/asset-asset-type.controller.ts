@@ -1,22 +1,13 @@
-import {
-  repository,
-} from '@loopback/repository';
-import {
-  param,
-  get,
-  getModelSchemaRef,
-} from '@loopback/rest';
-import {
-  Asset,
-  AssetType,
-} from '../models';
+import {repository} from '@loopback/repository';
+import {param, get, getModelSchemaRef} from '@loopback/rest';
+import {Asset, AssetType} from '../models';
 import {AssetRepository} from '../repositories';
 
 export class AssetAssetTypeController {
   constructor(
     @repository(AssetRepository)
     public assetRepository: AssetRepository,
-  ) { }
+  ) {}
 
   @get('/assets/{id}/asset-type', {
     responses: {

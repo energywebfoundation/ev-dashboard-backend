@@ -1,6 +1,17 @@
 import {Entity, model, property} from '@loopback/repository';
-import { IGeoLocation, IPublishTokenType, IAdditionalGeoLocation, IEvse, IHours, IEnergyMix } from '@shareandcharge/ocn-bridge/dist/models/ocpi/locations';
-import { IDisplayText, IBusinessDetails, IImage } from '@shareandcharge/ocn-bridge/dist/models/ocpi/common';
+import {
+  IGeoLocation,
+  IPublishTokenType,
+  IAdditionalGeoLocation,
+  IEvse,
+  IHours,
+  IEnergyMix,
+} from '@shareandcharge/ocn-bridge/dist/models/ocpi/locations';
+import {
+  IDisplayText,
+  IBusinessDetails,
+  IImage,
+} from '@shareandcharge/ocn-bridge/dist/models/ocpi/common';
 
 @model()
 export class OcpiLocation extends Entity {
@@ -156,7 +167,6 @@ export class OcpiLocation extends Entity {
     required: true,
   })
   last_updated: string;
-
 
   constructor(data?: Partial<OcpiLocation>) {
     super(data);

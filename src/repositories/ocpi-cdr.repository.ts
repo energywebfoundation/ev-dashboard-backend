@@ -8,9 +8,7 @@ export class OcpiCdrRepository extends DefaultCrudRepository<
   typeof OcpiCdr.prototype._id,
   OcpiCdrRelations
 > {
-  constructor(
-    @inject('datasources.memory') dataSource: MemoryDataSource,
-  ) {
+  constructor(@inject('datasources.memory') dataSource: MemoryDataSource) {
     super(OcpiCdr, dataSource);
   }
 }

@@ -1,6 +1,5 @@
 import {EwFlexApplication} from './application';
 
-
 export async function migrate(args: string[]) {
   const existingSchema = args.includes('--rebuild') ? 'drop' : 'alter';
   console.log('Migrating schemas (%s existing schema)', existingSchema);
@@ -8,7 +7,7 @@ export async function migrate(args: string[]) {
   const app = new EwFlexApplication();
   await app.boot();
   await app.migrateSchema({existingSchema});
-  
+
   // const offerWindowRepository = await app.getRepository(OfferWindowRepository);
   // let offerWindowTime = new Date();
   // offerWindowTime.setHours(0, 0, 0, 0);
@@ -22,7 +21,7 @@ export async function migrate(args: string[]) {
   //     start: Number(offerWindowTime.getHours() + '' + offerWindowTime.getMinutes()),
   //     end: Number(offerWindowEndTime.getHours() + '' + offerWindowEndTime.getMinutes()),
   //   });
-    
+
   // }
   // Connectors usually keep a pool of opened connections,
   // this keeps the process running even after all work is done.

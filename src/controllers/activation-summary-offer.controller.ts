@@ -1,22 +1,13 @@
-import {
-  repository,
-} from '@loopback/repository';
-import {
-  param,
-  get,
-  getModelSchemaRef,
-} from '@loopback/rest';
-import {
-  ActivationSummary,
-  Offer,
-} from '../models';
+import {repository} from '@loopback/repository';
+import {param, get, getModelSchemaRef} from '@loopback/rest';
+import {ActivationSummary, Offer} from '../models';
 import {ActivationSummaryRepository} from '../repositories';
 
 export class ActivationSummaryOfferController {
   constructor(
     @repository(ActivationSummaryRepository)
     public activationSummaryRepository: ActivationSummaryRepository,
-  ) { }
+  ) {}
 
   @get('/activation-summaries/{id}/offer', {
     responses: {

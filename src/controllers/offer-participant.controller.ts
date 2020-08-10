@@ -1,22 +1,13 @@
-import {
-  repository,
-} from '@loopback/repository';
-import {
-  param,
-  get,
-  getModelSchemaRef,
-} from '@loopback/rest';
-import {
-  Offer,
-  Participant,
-} from '../models';
+import {repository} from '@loopback/repository';
+import {param, get, getModelSchemaRef} from '@loopback/rest';
+import {Offer, Participant} from '../models';
 import {OfferRepository} from '../repositories';
 
 export class OfferParticipantController {
   constructor(
     @repository(OfferRepository)
     public offerRepository: OfferRepository,
-  ) { }
+  ) {}
 
   @get('/offers/{id}/participant', {
     responses: {

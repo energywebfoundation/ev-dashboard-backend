@@ -8,13 +8,13 @@ import {juggler} from '@loopback/repository';
 import config from './pgsql.datasource.config.json';
 
 interface PgsqlConfig {
-  name: string,
-  connector: string,
-  host: string,
-  port: number,
-  user: string,
-  password: string,
-  database: string
+  name: string;
+  connector: string;
+  host: string;
+  port: number;
+  user: string;
+  password: string;
+  database: string;
 }
 
 @lifeCycleObserver('datasource')
@@ -28,19 +28,19 @@ export class PgsqlDataSource extends juggler.DataSource
   ) {
     // overwrite the default config from the environment
     if (process.env.PGSQL_HOST) {
-      dsConfig.host = process.env.PGSQL_HOST
+      dsConfig.host = process.env.PGSQL_HOST;
     }
     if (process.env.PGSQL_PORT) {
-      dsConfig.port = Number(process.env.PGSQL_PORT)
+      dsConfig.port = Number(process.env.PGSQL_PORT);
     }
     if (process.env.PGSQL_USER) {
-      dsConfig.user = process.env.PGSQL_USER
+      dsConfig.user = process.env.PGSQL_USER;
     }
     if (process.env.PGSQL_PASSWORD) {
-      dsConfig.password = process.env.PGSQL_PASSWORD
+      dsConfig.password = process.env.PGSQL_PASSWORD;
     }
     if (process.env.PGSQL_DATABASE) {
-      dsConfig.database = process.env.PGSQL_DATABASE
+      dsConfig.database = process.env.PGSQL_DATABASE;
     }
     super(dsConfig);
   }

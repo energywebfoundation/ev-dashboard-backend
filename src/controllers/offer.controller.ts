@@ -1,32 +1,39 @@
-import { inject } from '@loopback/core';
+import {inject} from '@loopback/core';
 import {
   Count,
   CountSchema,
   Filter,
   repository,
-  Where
+  Where,
 } from '@loopback/repository';
 import {
-  del, get,
+  del,
+  get,
   getFilterSchemaFor,
   getModelSchemaRef,
-  getWhereSchemaFor, param,
-  patch, post,
+  getWhereSchemaFor,
+  param,
+  patch,
+  post,
   put,
-  requestBody
+  requestBody,
 } from '@loopback/rest';
-import { Socket } from 'socket.io';
-import { Offer } from '../models';
-import { OfferBundleStateRepository, OfferRepository, OfferStateRepository } from '../repositories';
+import {Socket} from 'socket.io';
+import {Offer} from '../models';
+import {
+  OfferBundleStateRepository,
+  OfferRepository,
+  OfferStateRepository,
+} from '../repositories';
 
 export class OfferController {
   constructor(
     @repository(OfferRepository)
-    public offerRepository : OfferRepository,
+    public offerRepository: OfferRepository,
     @repository(OfferStateRepository)
-    public offerStateRepository : OfferStateRepository,
+    public offerStateRepository: OfferStateRepository,
     @repository(OfferBundleStateRepository)
-    public offerBundleStateRepository : OfferBundleStateRepository,
+    public offerBundleStateRepository: OfferBundleStateRepository,
     @inject('websocket') private webSocket: Socket,
   ) {}
 
@@ -51,8 +58,8 @@ export class OfferController {
     })
     offer: Omit<Offer, 'id'>,
   ): Promise<Offer> {
-    let _offer = await this.offerRepository.create(offer);
-    // await this.redisOfferRepository.create(_offer);    
+    const _offer = await this.offerRepository.create(offer);
+    // await this.redisOfferRepository.create(_offer);
     return _offer;
   }
 
@@ -86,7 +93,8 @@ export class OfferController {
     },
   })
   async find(
-    @param.query.object('filter', getFilterSchemaFor(Offer)) filter?: Filter<Offer>,
+    @param.query.object('filter', getFilterSchemaFor(Offer))
+    filter?: Filter<Offer>,
   ): Promise<Offer[]> {
     return this.offerRepository.find(filter);
   }
@@ -127,7 +135,8 @@ export class OfferController {
   })
   async findById(
     @param.path.number('id') id: number,
-    @param.query.object('filter', getFilterSchemaFor(Offer)) filter?: Filter<Offer>
+    @param.query.object('filter', getFilterSchemaFor(Offer))
+    filter?: Filter<Offer>,
   ): Promise<Offer> {
     return this.offerRepository.findById(id, filter);
   }
@@ -151,7 +160,7 @@ export class OfferController {
     offer: Offer,
   ): Promise<void> {
     await this.offerRepository.updateById(id, offer);
-    this.webSocket.emit("offer/bundle/create","update");
+    this.webSocket.emit('offer/bundle/create', 'update');
   }
 
   @put('/offers/{id}', {
@@ -177,6 +186,6 @@ export class OfferController {
   })
   async deleteById(@param.path.number('id') id: number): Promise<void> {
     await this.offerRepository.deleteById(id);
-    this.webSocket.emit("offer/bundle/create","update");
+    this.webSocket.emit('offer/bundle/create', 'update');
   }
 }

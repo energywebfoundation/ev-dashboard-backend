@@ -23,14 +23,16 @@ import {AssetCommandRepository} from '../repositories';
 export class AssetCommandController {
   constructor(
     @repository(AssetCommandRepository)
-    public assetCommandRepository : AssetCommandRepository,
+    public assetCommandRepository: AssetCommandRepository,
   ) {}
 
   @post('/asset-commands', {
     responses: {
       '200': {
         description: 'AssetCommand model instance',
-        content: {'application/json': {schema: getModelSchemaRef(AssetCommand)}},
+        content: {
+          'application/json': {schema: getModelSchemaRef(AssetCommand)},
+        },
       },
     },
   })
@@ -59,7 +61,8 @@ export class AssetCommandController {
     },
   })
   async count(
-    @param.query.object('where', getWhereSchemaFor(AssetCommand)) where?: Where<AssetCommand>,
+    @param.query.object('where', getWhereSchemaFor(AssetCommand))
+    where?: Where<AssetCommand>,
   ): Promise<Count> {
     return this.assetCommandRepository.count(where);
   }
@@ -80,7 +83,8 @@ export class AssetCommandController {
     },
   })
   async find(
-    @param.query.object('filter', getFilterSchemaFor(AssetCommand)) filter?: Filter<AssetCommand>,
+    @param.query.object('filter', getFilterSchemaFor(AssetCommand))
+    filter?: Filter<AssetCommand>,
   ): Promise<AssetCommand[]> {
     return this.assetCommandRepository.find(filter);
   }
@@ -102,7 +106,8 @@ export class AssetCommandController {
       },
     })
     assetCommand: AssetCommand,
-    @param.query.object('where', getWhereSchemaFor(AssetCommand)) where?: Where<AssetCommand>,
+    @param.query.object('where', getWhereSchemaFor(AssetCommand))
+    where?: Where<AssetCommand>,
   ): Promise<Count> {
     return this.assetCommandRepository.updateAll(assetCommand, where);
   }
@@ -121,7 +126,8 @@ export class AssetCommandController {
   })
   async findById(
     @param.path.number('id') id: number,
-    @param.query.object('filter', getFilterSchemaFor(AssetCommand)) filter?: Filter<AssetCommand>
+    @param.query.object('filter', getFilterSchemaFor(AssetCommand))
+    filter?: Filter<AssetCommand>,
   ): Promise<AssetCommand> {
     return this.assetCommandRepository.findById(id, filter);
   }

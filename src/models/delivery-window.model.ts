@@ -4,7 +4,7 @@ import {Entity, model, property} from '@loopback/repository';
 export class DeliveryWindow extends Entity {
   @property({
     type: 'number',
-    id: true
+    id: true,
   })
   id?: number;
 
@@ -20,7 +20,6 @@ export class DeliveryWindow extends Entity {
   })
   endTime: number;
 
-
   constructor(data?: Partial<DeliveryWindow>) {
     super(data);
   }
@@ -30,4 +29,5 @@ export interface DeliveryWindowRelations {
   // describe navigational properties here
 }
 
-export type DeliveryWindowWithRelations = DeliveryWindow & DeliveryWindowRelations;
+export type DeliveryWindowWithRelations = DeliveryWindow &
+  DeliveryWindowRelations;

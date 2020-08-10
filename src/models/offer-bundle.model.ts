@@ -1,4 +1,10 @@
-import {Entity, model, property, belongsTo, hasMany} from '@loopback/repository';
+import {
+  Entity,
+  model,
+  property,
+  belongsTo,
+  hasMany,
+} from '@loopback/repository';
 import {OfferBundleState} from './offer-bundle-state.model';
 import {Offer, OfferWithRelations} from './offer.model';
 
@@ -7,7 +13,7 @@ export class OfferBundle extends Entity {
   @property({
     type: 'number',
     id: true,
-    index:true
+    index: true,
   })
   id: number;
 
@@ -29,7 +35,7 @@ export class OfferBundle extends Entity {
   @property({
     type: 'string',
     required: false,
-    default: ""
+    default: '',
   })
   uuid: string;
 
@@ -41,7 +47,6 @@ export class OfferBundle extends Entity {
 
   @belongsTo(() => Offer)
   demandOfferId: number;
-  
 
   constructor(data?: Partial<OfferBundle>) {
     super(data);
@@ -50,7 +55,7 @@ export class OfferBundle extends Entity {
 
 export interface OfferBundleRelations {
   // describe navigational properties here
-  offers? : OfferWithRelations[];
+  offers?: OfferWithRelations[];
 }
 
 export type OfferBundleWithRelations = OfferBundle & OfferBundleRelations;

@@ -4,7 +4,7 @@ import {Entity, model, property} from '@loopback/repository';
 export class Constraints extends Entity {
   @property({
     type: 'number',
-    id: true
+    id: true,
   })
   id?: number;
 
@@ -31,8 +31,6 @@ export class Constraints extends Entity {
     required: false,
   })
   ownerId: number;
-
-
 
   constructor(data?: Partial<Constraints>) {
     super(data);

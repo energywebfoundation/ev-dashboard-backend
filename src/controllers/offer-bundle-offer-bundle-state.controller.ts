@@ -1,22 +1,13 @@
-import {
-  repository,
-} from '@loopback/repository';
-import {
-  param,
-  get,
-  getModelSchemaRef,
-} from '@loopback/rest';
-import {
-  OfferBundle,
-  OfferBundleState,
-} from '../models';
+import {repository} from '@loopback/repository';
+import {param, get, getModelSchemaRef} from '@loopback/rest';
+import {OfferBundle, OfferBundleState} from '../models';
 import {OfferBundleRepository} from '../repositories';
 
 export class OfferBundleOfferBundleStateController {
   constructor(
     @repository(OfferBundleRepository)
     public offerBundleRepository: OfferBundleRepository,
-  ) { }
+  ) {}
 
   @get('/offer-bundles/{id}/offer-bundle-state', {
     responses: {

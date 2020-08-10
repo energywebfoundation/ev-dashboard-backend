@@ -13,9 +13,9 @@ export * from './participant-type.repository';
 export * from './participant.repository';
 export * from './constraints.repository';
 export * from './asset-command.repository';
-export * from './ocpi-cdr.repository'
-export * from './ocpi-endpoint.repository'
-export * from './ocpi-location.repository'
-export * from './ocpi-session.repository'
-export * from './ocpi-token.repository'
-export * from './ocn-connection.repository'
+export * from './ocpi-cdr.repository';
+export * from './ocpi-endpoint.repository';
+export * from './ocpi-location.repository';
+export * from './ocpi-session.repository';
+export * from './ocpi-token.repository';
+export * from './ocn-connection.repository';

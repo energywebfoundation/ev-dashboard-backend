@@ -23,7 +23,7 @@ import {ParticipantRepository} from '../repositories';
 export class ParticipantController {
   constructor(
     @repository(ParticipantRepository)
-    public participantRepository : ParticipantRepository,
+    public participantRepository: ParticipantRepository,
   ) {}
 
   @post('/participants', {
@@ -59,7 +59,8 @@ export class ParticipantController {
     },
   })
   async count(
-    @param.query.object('where', getWhereSchemaFor(Participant)) where?: Where<Participant>,
+    @param.query.object('where', getWhereSchemaFor(Participant))
+    where?: Where<Participant>,
   ): Promise<Count> {
     return this.participantRepository.count(where);
   }
@@ -80,7 +81,8 @@ export class ParticipantController {
     },
   })
   async find(
-    @param.query.object('filter', getFilterSchemaFor(Participant)) filter?: Filter<Participant>,
+    @param.query.object('filter', getFilterSchemaFor(Participant))
+    filter?: Filter<Participant>,
   ): Promise<Participant[]> {
     return this.participantRepository.find(filter);
   }
@@ -102,7 +104,8 @@ export class ParticipantController {
       },
     })
     participant: Participant,
-    @param.query.object('where', getWhereSchemaFor(Participant)) where?: Where<Participant>,
+    @param.query.object('where', getWhereSchemaFor(Participant))
+    where?: Where<Participant>,
   ): Promise<Count> {
     return this.participantRepository.updateAll(participant, where);
   }
@@ -121,7 +124,8 @@ export class ParticipantController {
   })
   async findById(
     @param.path.number('id') id: number,
-    @param.query.object('filter', getFilterSchemaFor(Participant)) filter?: Filter<Participant>
+    @param.query.object('filter', getFilterSchemaFor(Participant))
+    filter?: Filter<Participant>,
   ): Promise<Participant> {
     return this.participantRepository.findById(id, filter);
   }

@@ -1,10 +1,10 @@
-import { Entity, model, property } from '@loopback/repository';
+import {Entity, model, property} from '@loopback/repository';
 
 @model()
 export class ParticipantType extends Entity {
   @property({
     type: 'number',
-    id: true
+    id: true,
   })
   id?: number;
 
@@ -19,7 +19,6 @@ export class ParticipantType extends Entity {
   })
   claimTypeId: number;
 
-
   constructor(data?: Partial<ParticipantType>) {
     super(data);
   }
@@ -29,4 +28,5 @@ export interface ParticipantTypeRelations {
   // describe navigational properties here
 }
 
-export type ParticipantTypeWithRelations = ParticipantType & ParticipantTypeRelations;
+export type ParticipantTypeWithRelations = ParticipantType &
+  ParticipantTypeRelations;

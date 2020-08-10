@@ -23,7 +23,7 @@ import {ConstraintsRepository} from '../repositories';
 export class ConstraintsController {
   constructor(
     @repository(ConstraintsRepository)
-    public constraintsRepository : ConstraintsRepository,
+    public constraintsRepository: ConstraintsRepository,
   ) {}
 
   @post('/constraints', {
@@ -59,7 +59,8 @@ export class ConstraintsController {
     },
   })
   async count(
-    @param.query.object('where', getWhereSchemaFor(Constraints)) where?: Where<Constraints>,
+    @param.query.object('where', getWhereSchemaFor(Constraints))
+    where?: Where<Constraints>,
   ): Promise<Count> {
     return this.constraintsRepository.count(where);
   }
@@ -80,7 +81,8 @@ export class ConstraintsController {
     },
   })
   async find(
-    @param.query.object('filter', getFilterSchemaFor(Constraints)) filter?: Filter<Constraints>,
+    @param.query.object('filter', getFilterSchemaFor(Constraints))
+    filter?: Filter<Constraints>,
   ): Promise<Constraints[]> {
     return this.constraintsRepository.find(filter);
   }
@@ -102,7 +104,8 @@ export class ConstraintsController {
       },
     })
     constraints: Constraints,
-    @param.query.object('where', getWhereSchemaFor(Constraints)) where?: Where<Constraints>,
+    @param.query.object('where', getWhereSchemaFor(Constraints))
+    where?: Where<Constraints>,
   ): Promise<Count> {
     return this.constraintsRepository.updateAll(constraints, where);
   }
@@ -121,7 +124,8 @@ export class ConstraintsController {
   })
   async findById(
     @param.path.number('id') id: number,
-    @param.query.object('filter', getFilterSchemaFor(Constraints)) filter?: Filter<Constraints>
+    @param.query.object('filter', getFilterSchemaFor(Constraints))
+    filter?: Filter<Constraints>,
   ): Promise<Constraints> {
     return this.constraintsRepository.findById(id, filter);
   }

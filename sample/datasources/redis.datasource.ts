@@ -8,10 +8,10 @@ import {juggler} from '@loopback/repository';
 import config from './redis.datasource.config.json';
 
 interface RedisConfig {
-  name: string,
-  connector: string,
-  host: string,
-  port: number
+  name: string;
+  connector: string;
+  host: string;
+  port: number;
 }
 
 @lifeCycleObserver('datasource')
@@ -24,10 +24,10 @@ export class RedisDataSource extends juggler.DataSource
     dsConfig: RedisConfig = config,
   ) {
     if (process.env.REDIS_HOST) {
-      dsConfig.host = process.env.REDIS_HOST
+      dsConfig.host = process.env.REDIS_HOST;
     }
     if (process.env.REDIS_PORT) {
-      dsConfig.port = Number(process.env.REDIS_PORT)
+      dsConfig.port = Number(process.env.REDIS_PORT);
     }
     super(dsConfig);
   }

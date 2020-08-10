@@ -8,19 +8,17 @@ export class OcpiLocationRepository extends DefaultCrudRepository<
   typeof OcpiLocation.prototype._id,
   OcpiLocationRelations
 > {
-  constructor(
-    @inject('datasources.memory') dataSource: MemoryDataSource,
-  ) {
+  constructor(@inject('datasources.memory') dataSource: MemoryDataSource) {
     super(OcpiLocation, dataSource);
   }
 
   async createOrUpdate(entity: OcpiLocation) {
     const saved = await this.findOne({
-      where: { 
+      where: {
         country_code: entity.country_code,
         party_id: entity.party_id,
-        id: entity.id
-      }
+        id: entity.id,
+      },
     });
     if (saved) {
       await this.replaceById(saved._id, entity);
@@ -28,5 +26,4 @@ export class OcpiLocationRepository extends DefaultCrudRepository<
       await this.create(entity);
     }
   }
-
 }

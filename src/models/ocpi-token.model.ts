@@ -88,7 +88,6 @@ export class OcpiToken extends Entity {
   })
   last_updated: string;
 
-
   constructor(data?: Partial<OcpiToken>) {
     super(data);
   }

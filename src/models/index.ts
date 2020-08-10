@@ -13,9 +13,9 @@ export * from './activation-summary.model';
 export * from './participant.model';
 export * from './constraints.model';
 export * from './asset-command.model';
-export * from './ocpi-cdr.model'
-export * from './ocpi-endpoint.model'
-export * from './ocpi-location.model'
-export * from './ocpi-session.model'
-export * from './ocpi-token.model'
-export * from './ocn-connection.model'
+export * from './ocpi-cdr.model';
+export * from './ocpi-endpoint.model';
+export * from './ocpi-location.model';
+export * from './ocpi-session.model';
+export * from './ocpi-token.model';
+export * from './ocn-connection.model';

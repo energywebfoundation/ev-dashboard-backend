@@ -23,7 +23,7 @@ import {OfferBundleRepository} from '../repositories';
 export class OfferBundleController {
   constructor(
     @repository(OfferBundleRepository)
-    public offerBundleRepository : OfferBundleRepository,
+    public offerBundleRepository: OfferBundleRepository,
   ) {}
 
   @post('/offer-bundles', {
@@ -59,7 +59,8 @@ export class OfferBundleController {
     },
   })
   async count(
-    @param.query.object('where', getWhereSchemaFor(OfferBundle)) where?: Where<OfferBundle>,
+    @param.query.object('where', getWhereSchemaFor(OfferBundle))
+    where?: Where<OfferBundle>,
   ): Promise<Count> {
     return this.offerBundleRepository.count(where);
   }
@@ -80,7 +81,8 @@ export class OfferBundleController {
     },
   })
   async find(
-    @param.query.object('filter', getFilterSchemaFor(OfferBundle)) filter?: Filter<OfferBundle>,
+    @param.query.object('filter', getFilterSchemaFor(OfferBundle))
+    filter?: Filter<OfferBundle>,
   ): Promise<OfferBundle[]> {
     return this.offerBundleRepository.find(filter);
   }
@@ -102,7 +104,8 @@ export class OfferBundleController {
       },
     })
     offerBundle: OfferBundle,
-    @param.query.object('where', getWhereSchemaFor(OfferBundle)) where?: Where<OfferBundle>,
+    @param.query.object('where', getWhereSchemaFor(OfferBundle))
+    where?: Where<OfferBundle>,
   ): Promise<Count> {
     return this.offerBundleRepository.updateAll(offerBundle, where);
   }
@@ -121,7 +124,8 @@ export class OfferBundleController {
   })
   async findById(
     @param.path.number('id') id: number,
-    @param.query.object('filter', getFilterSchemaFor(OfferBundle)) filter?: Filter<OfferBundle>
+    @param.query.object('filter', getFilterSchemaFor(OfferBundle))
+    filter?: Filter<OfferBundle>,
   ): Promise<OfferBundle> {
     return this.offerBundleRepository.findById(id, filter);
   }

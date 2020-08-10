@@ -1,2 +1,2 @@
 export * from './mqtt-broker.component';
-export * from './ocn-bridge.component'
+export * from './ocn-bridge.component';

@@ -8,19 +8,17 @@ export class OcpiTokenRepository extends DefaultCrudRepository<
   typeof OcpiToken.prototype._id,
   OcpiTokenRelations
 > {
-  constructor(
-    @inject('datasources.memory') dataSource: MemoryDataSource,
-  ) {
+  constructor(@inject('datasources.memory') dataSource: MemoryDataSource) {
     super(OcpiToken, dataSource);
   }
 
   async createOrUpdate(entity: OcpiToken) {
     const saved = await this.findOne({
-      where: { 
+      where: {
         country_code: entity.country_code,
         party_id: entity.party_id,
-        uid: entity.uid
-      }
+        uid: entity.uid,
+      },
     });
     if (saved) {
       await this.replaceById(saved._id, entity, {});
@@ -28,5 +26,4 @@ export class OcpiTokenRepository extends DefaultCrudRepository<
       await this.create(entity);
     }
   }
-
 }

@@ -1,10 +1,10 @@
-import { Entity, model, property } from '@loopback/repository';
+import {Entity, model, property} from '@loopback/repository';
 
 @model()
 export class ClaimType extends Entity {
   @property({
     type: 'number',
-    id: true
+    id: true,
   })
   id?: number;
 
@@ -31,7 +31,6 @@ export class ClaimType extends Entity {
     required: false,
   })
   requiredSchema: string;
-
 
   constructor(data?: Partial<ClaimType>) {
     super(data);

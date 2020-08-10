@@ -5,17 +5,17 @@ export class OcnConnection extends Entity {
   @property({
     type: 'number',
     id: true,
-    generated: true
+    generated: true,
   })
   id?: number;
-  
+
   @property({
-    type: 'string'
+    type: 'string',
   })
   tokenB: string;
 
   @property({
-    type: 'string'
+    type: 'string',
   })
   tokenC: string;
 

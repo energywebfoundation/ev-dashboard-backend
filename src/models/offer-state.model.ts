@@ -4,7 +4,7 @@ import {Entity, model, property} from '@loopback/repository';
 export class OfferState extends Entity {
   @property({
     type: 'number',
-    id: true
+    id: true,
   })
   id?: number;
 
@@ -20,7 +20,6 @@ export class OfferState extends Entity {
   })
   claimTypeId: number;
 
-
   constructor(data?: Partial<OfferState>) {
     super(data);
   }
@@ -28,7 +27,6 @@ export class OfferState extends Entity {
 
 export interface OfferStateRelations {
   // describe navigational properties here
-
 }
 
 export type OfferStateWithRelations = OfferState & OfferStateRelations;

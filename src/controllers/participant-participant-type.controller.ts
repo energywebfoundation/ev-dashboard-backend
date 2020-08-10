@@ -1,22 +1,13 @@
-import {
-  repository,
-} from '@loopback/repository';
-import {
-  param,
-  get,
-  getModelSchemaRef,
-} from '@loopback/rest';
-import {
-  Participant,
-  ParticipantType,
-} from '../models';
+import {repository} from '@loopback/repository';
+import {param, get, getModelSchemaRef} from '@loopback/rest';
+import {Participant, ParticipantType} from '../models';
 import {ParticipantRepository} from '../repositories';
 
 export class ParticipantParticipantTypeController {
   constructor(
     @repository(ParticipantRepository)
     public participantRepository: ParticipantRepository,
-  ) { }
+  ) {}
 
   @get('/participants/{id}/participant-type', {
     responses: {

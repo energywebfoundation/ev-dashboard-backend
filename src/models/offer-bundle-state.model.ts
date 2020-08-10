@@ -4,7 +4,7 @@ import {Entity, model, property} from '@loopback/repository';
 export class OfferBundleState extends Entity {
   @property({
     type: 'number',
-    id: true
+    id: true,
   })
   id?: number;
 
@@ -13,7 +13,6 @@ export class OfferBundleState extends Entity {
     required: true,
   })
   name: string;
-
 
   constructor(data?: Partial<OfferBundleState>) {
     super(data);
@@ -24,4 +23,5 @@ export interface OfferBundleStateRelations {
   // describe navigational properties here
 }
 
-export type OfferBundleStateWithRelations = OfferBundleState & OfferBundleStateRelations;
+export type OfferBundleStateWithRelations = OfferBundleState &
+  OfferBundleStateRelations;

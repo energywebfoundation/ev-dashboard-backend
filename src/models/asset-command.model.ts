@@ -4,7 +4,7 @@ import {Entity, model, property} from '@loopback/repository';
 export class AssetCommand extends Entity {
   @property({
     type: 'number',
-    id: true
+    id: true,
   })
   id?: number;
 
@@ -24,7 +24,6 @@ export class AssetCommand extends Entity {
     required: true,
   })
   topic: string;
-
 
   constructor(data?: Partial<AssetCommand>) {
     super(data);

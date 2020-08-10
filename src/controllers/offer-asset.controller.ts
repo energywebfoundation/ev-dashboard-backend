@@ -1,22 +1,13 @@
-import {
-  repository,
-} from '@loopback/repository';
-import {
-  param,
-  get,
-  getModelSchemaRef,
-} from '@loopback/rest';
-import {
-  Offer,
-  Asset,
-} from '../models';
-import { OfferRepository } from '../repositories';
+import {repository} from '@loopback/repository';
+import {param, get, getModelSchemaRef} from '@loopback/rest';
+import {Offer, Asset} from '../models';
+import {OfferRepository} from '../repositories';
 
 export class OfferAssetController {
   constructor(
     @repository(OfferRepository)
     public offerRepository: OfferRepository,
-  ) { }
+  ) {}
 
   @get('/offers/{id}/asset', {
     responses: {
@@ -24,7 +15,7 @@ export class OfferAssetController {
         description: 'Asset belonging to Offer',
         content: {
           'application/json': {
-            schema: { type: 'array', items: getModelSchemaRef(Asset) },
+            schema: {type: 'array', items: getModelSchemaRef(Asset)},
           },
         },
       },

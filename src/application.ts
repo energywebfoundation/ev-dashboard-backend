@@ -11,21 +11,21 @@ import path from 'path';
 import {MySequence} from './sequence';
 import {MqttBrokerComponent, OcnBridgeComponent} from './components';
 import {MqttDataSource, MemoryDataSource} from './datasources';
-import { Web3Provider } from './providers/web3.provider';
-import { MERKLE_ROOT_SERVICE_PROVIDER, ASSET_ACTIVATION_SERVICE } from './keys';
-import { MerkleRootService } from './services';
-import { MerkleRootContractProvider } from './providers/merkle-root-contract.provider';
-import { BindingScope } from '@loopback/context';
-import { AssetActivationService } from './services/asset-activation.service';
-import { OcnBridgeApiProvider } from './providers';
-import { OcnBridgeDbProvider } from './providers/ocn-bridge-db.provider';
-import { 
-  OcnConnectionRepository, 
-  OcpiEndpointRepository, 
-  OcpiSessionRepository, 
-  OcpiCdrRepository, 
-  OcpiLocationRepository, 
-  OcpiTokenRepository 
+import {Web3Provider} from './providers/web3.provider';
+import {MERKLE_ROOT_SERVICE_PROVIDER, ASSET_ACTIVATION_SERVICE} from './keys';
+import {MerkleRootService} from './services';
+import {MerkleRootContractProvider} from './providers/merkle-root-contract.provider';
+import {BindingScope} from '@loopback/context';
+import {AssetActivationService} from './services/asset-activation.service';
+import {OcnBridgeApiProvider} from './providers';
+import {OcnBridgeDbProvider} from './providers/ocn-bridge-db.provider';
+import {
+  OcnConnectionRepository,
+  OcpiEndpointRepository,
+  OcpiSessionRepository,
+  OcpiCdrRepository,
+  OcpiLocationRepository,
+  OcpiTokenRepository,
 } from './repositories';
 
 export class EwFlexApplication extends BootMixin(
@@ -47,26 +47,32 @@ export class EwFlexApplication extends BootMixin(
     this.component(RestExplorerComponent);
 
     this.dataSource(MqttDataSource);
-    this.component(MqttBrokerComponent);    
-    this.bind(ASSET_ACTIVATION_SERVICE).toClass(AssetActivationService).inScope(BindingScope.SINGLETON);
+    this.component(MqttBrokerComponent);
+    this.bind(ASSET_ACTIVATION_SERVICE)
+      .toClass(AssetActivationService)
+      .inScope(BindingScope.SINGLETON);
     this.bind(MERKLE_ROOT_SERVICE_PROVIDER).toClass(MerkleRootService);
     this.serviceProvider(MerkleRootContractProvider);
     this.serviceProvider(Web3Provider);
 
     // enable connection to OCN
     if (options.ocn) {
-      this.dataSource(MemoryDataSource)
-      this.bind('providers.ocnBridgeApiProvider').toClass(OcnBridgeApiProvider).inScope(BindingScope.SINGLETON)
-      this.bind('providers.ocnBridgeDbProvider').toClass(OcnBridgeDbProvider).inScope(BindingScope.SINGLETON)
-      this.repository(OcnConnectionRepository)
-      this.repository(OcpiEndpointRepository)
+      this.dataSource(MemoryDataSource);
+      this.bind('providers.ocnBridgeApiProvider')
+        .toClass(OcnBridgeApiProvider)
+        .inScope(BindingScope.SINGLETON);
+      this.bind('providers.ocnBridgeDbProvider')
+        .toClass(OcnBridgeDbProvider)
+        .inScope(BindingScope.SINGLETON);
+      this.repository(OcnConnectionRepository);
+      this.repository(OcpiEndpointRepository);
       this.repository(OcpiSessionRepository);
-      this.repository(OcpiCdrRepository)
-      this.repository(OcpiTokenRepository)
-      this.repository(OcpiLocationRepository)
+      this.repository(OcpiCdrRepository);
+      this.repository(OcpiTokenRepository);
+      this.repository(OcpiLocationRepository);
       this.component(OcnBridgeComponent);
     }
-    
+
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
     this.bootOptions = {
@@ -75,7 +81,7 @@ export class EwFlexApplication extends BootMixin(
         dirs: ['controllers'],
         extensions: ['.controller.js'],
         nested: true,
-      }
+      },
     };
   }
 }

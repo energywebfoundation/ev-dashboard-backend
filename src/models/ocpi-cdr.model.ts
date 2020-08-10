@@ -1,7 +1,16 @@
 import {Entity, model, property} from '@loopback/repository';
-import { ICdrLocation, ISignedData, IChargeDetailRecord } from '@shareandcharge/ocn-bridge/dist/models/ocpi/cdrs';
-import { ITariff } from '@shareandcharge/ocn-bridge/dist/models/ocpi/tariffs';
-import { ICdrToken, IChargingPeriod, IPrice, authMethod } from '@shareandcharge/ocn-bridge/dist/models/ocpi/session';
+import {
+  ICdrLocation,
+  ISignedData,
+  IChargeDetailRecord,
+} from '@shareandcharge/ocn-bridge/dist/models/ocpi/cdrs';
+import {ITariff} from '@shareandcharge/ocn-bridge/dist/models/ocpi/tariffs';
+import {
+  ICdrToken,
+  IChargingPeriod,
+  IPrice,
+  authMethod,
+} from '@shareandcharge/ocn-bridge/dist/models/ocpi/session';
 
 @model()
 export class OcpiCdr extends Entity implements IChargeDetailRecord {
@@ -83,7 +92,7 @@ export class OcpiCdr extends Entity implements IChargeDetailRecord {
 
   @property({
     type: 'array',
-    itemType: 'object'
+    itemType: 'object',
   })
   charging_periods: IChargingPeriod[];
 

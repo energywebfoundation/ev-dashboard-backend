@@ -6,14 +6,18 @@ import {
   lifeCycleObserver, // The decorator
   LifeCycleObserver,
 } from '@loopback/core';
-import { repository } from '@loopback/repository';
-import { MqttDataSource } from '../datasources/mqtt.datasource';
-import { OfferRepository, ActivationSummaryRepository, ClaimRepository, AssetRepository } from '../repositories';
-import { Socket } from 'socket.io';
-import { OFFER_STATE, CLAIM_TYPE } from '../keys';
-import { Claim, Asset } from '../models';
+import {repository} from '@loopback/repository';
+import {MqttDataSource} from '../datasources/mqtt.datasource';
+import {
+  OfferRepository,
+  ActivationSummaryRepository,
+  ClaimRepository,
+  AssetRepository,
+} from '../repositories';
+import {Socket} from 'socket.io';
+import {OFFER_STATE, CLAIM_TYPE} from '../keys';
+import {Claim, Asset} from '../models';
 const jwt = require('jsonwebtoken');
-
 
 const mqtt = require('mqtt');
 
@@ -30,7 +34,8 @@ export class MqttBridgeObserver implements LifeCycleObserver {
     @repository(OfferRepository) private offerRepository: OfferRepository,
     @repository(ClaimRepository) private claimRepository: ClaimRepository,
     @repository(AssetRepository) private assetRepository: AssetRepository,
-    @repository(ActivationSummaryRepository) private activationSummaryRepository: ActivationSummaryRepository,
+    @repository(ActivationSummaryRepository)
+    private activationSummaryRepository: ActivationSummaryRepository,
     @inject('datasources.mqtt') private dataSource: MqttDataSource,
   ) {
     console.log('MqttBridgeObserver observer is initialized');
@@ -46,9 +51,9 @@ export class MqttBridgeObserver implements LifeCycleObserver {
     setTimeout(() => {
       const client = mqtt.connect(
         'mqtt://' +
-        this.dataSource.settings.host +
-        ':' +
-        this.dataSource.settings.port,
+          this.dataSource.settings.host +
+          ':' +
+          this.dataSource.settings.port,
       );
 
       client.on('message', async (topic: string, message: string) => {
@@ -58,21 +63,26 @@ export class MqttBridgeObserver implements LifeCycleObserver {
           message.toString(),
           topic,
         );
-        this.webSocket = this.app.getSync<Socket>("websocket");
+        this.webSocket = this.app.getSync<Socket>('websocket');
         switch (topic) {
           case 'asset/jwtAsset': {
-            let iot = JSON.parse(message);
+            const iot = JSON.parse(message);
             const payload = await jwt.decode(iot.jwt);
             console.log(payload);
             console.log(`mqtt-bridge.controller: ${topic} payload:`, payload);
-            const updatedClaim = this.claimRepository.update(new Claim({
-              issuerId: '', // issuer is Installer
-              ownerId: payload.iss,
-              claimTypeId: CLAIM_TYPE.ASSET,
-              claimData: iot.jwt,
-              id: payload.id,
-            }));
-            console.log(`claim.controller: ${topic} updatedClaim:`, updatedClaim);
+            const updatedClaim = this.claimRepository.update(
+              new Claim({
+                issuerId: '', // issuer is Installer
+                ownerId: payload.iss,
+                claimTypeId: CLAIM_TYPE.ASSET,
+                claimData: iot.jwt,
+                id: payload.id,
+              }),
+            );
+            console.log(
+              `claim.controller: ${topic} updatedClaim:`,
+              updatedClaim,
+            );
             const partialAsset = {
               ownerId: payload.iss,
               claimId: payload.id,
@@ -82,7 +92,7 @@ export class MqttBridgeObserver implements LifeCycleObserver {
               manufacturer: payload.manufacturer,
               modelNumber: payload.modelNumber,
               assetTypeId: 0,
-              assetStateId: 0
+              assetStateId: 0,
             };
             console.log(partialAsset);
             this.assetRepository.create(new Asset(partialAsset));
@@ -102,45 +112,51 @@ export class MqttBridgeObserver implements LifeCycleObserver {
             break;
           }
           case 'offer/summary': {
-            let _summary = jwt.decode(message);
-            let summary = JSON.parse(JSON.stringify(_summary));
+            const _summary = jwt.decode(message);
+            const summary = JSON.parse(JSON.stringify(_summary));
 
             // let summary = { "offerid": "7f2f6c88-c3f0-42b6-92ff-595a90a206d1", "activations": [{ "interval": 2, "baseline": 100.1 }, { "interval": 4, "baseline": 100.1 }, { "interval": 7, "baseline": 100.1 }] };
             // console.log({ where: { offerId: summary.offerid } });
-            this.offerRepository.findOne({ where: { offerId: summary.offerid } }).then((offer) => {
-              console.log(offer);
-              this.activationSummaryRepository.create({
-                offerId: offer?.id,
-                summary: summary,
-                timestamp: new Date().toUTCString()
+            this.offerRepository
+              .findOne({where: {offerId: summary.offerid}})
+              .then(offer => {
+                console.log(offer);
+                this.activationSummaryRepository.create({
+                  offerId: offer?.id,
+                  summary: summary,
+                  timestamp: new Date().toUTCString(),
+                });
+                this.webSocket.emit('offer/summary', summary);
               });
-              this.webSocket.emit('offer/summary', summary);
-            });
-            
+
             break;
           }
           case 'offer/confirm': {
             const offerObject = jwt.decode(message);
             console.log(offerObject);
-            this.offerRepository.findOne({ where: { offerId: offerObject.offerID } }).then(async (offer: any) => {
-              console.log(offer);
-              offer.offerStateId = OFFER_STATE.CONFIRM;
-              await this.offerRepository.update(offer);
-              this.webSocket.emit('did/offer/create', offer);
-            });
-            
+            this.offerRepository
+              .findOne({where: {offerId: offerObject.offerID}})
+              .then(async (offer: any) => {
+                console.log(offer);
+                offer.offerStateId = OFFER_STATE.CONFIRM;
+                await this.offerRepository.update(offer);
+                this.webSocket.emit('did/offer/create', offer);
+              });
+
             break;
           }
           case 'offer/submit': {
             // const offerObject = JSON.parse(message);
             const offerObject = jwt.decode(message);
             console.log(offerObject.offerID);
-            this.offerRepository.findOne({ where: { offerId: offerObject.offerID } }).then(async (offer: any) => {
-              console.log(offer);
-              offer.offerStateId = OFFER_STATE.PENDING_SUBMIT;
-              await this.offerRepository.update(offer);
-              this.webSocket.emit('did/offer/create', offer);
-            });
+            this.offerRepository
+              .findOne({where: {offerId: offerObject.offerID}})
+              .then(async (offer: any) => {
+                console.log(offer);
+                offer.offerStateId = OFFER_STATE.PENDING_SUBMIT;
+                await this.offerRepository.update(offer);
+                this.webSocket.emit('did/offer/create', offer);
+              });
 
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             // this.offerRepository.create(offerObject).then(() => {

@@ -18,12 +18,12 @@ import {
   requestBody,
 } from '@loopback/rest';
 import {Asset} from '../models';
-import {AssetRepository,} from '../repositories';
+import {AssetRepository} from '../repositories';
 
 export class AssetController {
   constructor(
     @repository(AssetRepository)
-    public assetRepository : AssetRepository,
+    public assetRepository: AssetRepository,
   ) {}
 
   @post('/assets', {
@@ -80,7 +80,8 @@ export class AssetController {
     },
   })
   async find(
-    @param.query.object('filter', getFilterSchemaFor(Asset)) filter?: Filter<Asset>,
+    @param.query.object('filter', getFilterSchemaFor(Asset))
+    filter?: Filter<Asset>,
   ): Promise<Asset[]> {
     return this.assetRepository.find(filter);
   }
@@ -121,7 +122,8 @@ export class AssetController {
   })
   async findById(
     @param.path.number('id') id: number,
-    @param.query.object('filter', getFilterSchemaFor(Asset)) filter?: Filter<Asset>
+    @param.query.object('filter', getFilterSchemaFor(Asset))
+    filter?: Filter<Asset>,
   ): Promise<Asset> {
     return this.assetRepository.findById(id, filter);
   }
