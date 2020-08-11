@@ -17,7 +17,14 @@ if (require.main === module) {
       port: +(process.env.PORT || 8081),
       host: process.env.HOST,
     },
-    ocn: true,
+    ocn: {
+      enabled: true,
+      stage: 'local',
+      bridgeURL: 'http://localhost:8090',
+      nodeURL: 'http://localhost:8100',
+      identity: process.env.OCN_PRIVATE_KEY,
+      tokenA: process.env.OCN_TOKEN_A,
+    },
   };
   application.main(config).catch(err => {
     console.error('Cannot start the application.', err);

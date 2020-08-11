@@ -10,7 +10,7 @@ import {
   IChargingPeriod,
   IPrice,
   authMethod,
-} from '@shareandcharge/ocn-bridge/dist/models/ocpi/session';
+} from '@shareandcharge/ocn-bridge';
 
 @model()
 export class OcpiCdr extends Entity implements IChargeDetailRecord {

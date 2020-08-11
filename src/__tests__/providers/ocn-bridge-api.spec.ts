@@ -47,7 +47,11 @@ describe('OcnBridgeApiProvider', () => {
 
   it('should create cdr', async () => {
     await api.cdrs?.receiver?.create(expectedCdrData);
-    const actual = await api.cdrs?.receiver?.get(expectedCdrData.id);
+    const actual = await api.cdrs?.receiver?.get(
+      expectedCdrData.country_code,
+      expectedCdrData.party_id,
+      expectedCdrData.id,
+    );
     assert.equal(actual?.total_energy, expectedCdrData.total_energy);
   });
 
@@ -64,7 +68,7 @@ describe('OcnBridgeApiProvider', () => {
 
   it('should throw error if no cdr found', async () => {
     try {
-      await api.cdrs?.receiver?.get('some-id');
+      await api.cdrs?.receiver?.get('de', 'abc', 'some-id');
       assert.fail('expected statement to throw error');
     } catch (e) {
       assert.equal(e.message, 'No cdr with id=some-id found.');

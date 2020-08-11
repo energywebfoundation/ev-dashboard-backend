@@ -4,8 +4,9 @@ import {repository} from '@loopback/repository';
 import {OcnConnectionRepository, OcpiEndpointRepository} from '../repositories';
 import {OcnConnection} from '../models';
 import {IVersionDetail} from '@shareandcharge/ocn-bridge/dist/models/ocpi/versions';
+import {OCN_BRIDGE_DB_PROVIDER} from '../keys';
 
-@bind.provider({tags: {key: 'providers.ocnBridgeDbProvider'}})
+@bind.provider({tags: {key: OCN_BRIDGE_DB_PROVIDER}})
 export class OcnBridgeDbProvider {
   constructor(
     @repository(OcnConnectionRepository)

@@ -1,11 +1,12 @@
 import {bind, ContextTags, inject} from '@loopback/core';
 import {IPluggableAPI} from '@shareandcharge/ocn-bridge';
-import {ISession} from '@shareandcharge/ocn-bridge/dist/models/ocpi/session';
+import {ISession} from '@shareandcharge/ocn-bridge';
 import {IChargeDetailRecord} from '@shareandcharge/ocn-bridge/dist/models/ocpi/cdrs';
 import {repository} from '@loopback/repository';
 import {OcpiSessionRepository, OcpiCdrRepository} from '../repositories';
+import {OCN_BRIDGE_API_PROVIDER} from '../keys';
 
-@bind.provider({tags: {key: 'providers.ocnBridgeApiProvider'}})
+@bind.provider({tags: {key: OCN_BRIDGE_API_PROVIDER}})
 export class OcnBridgeApiProvider {
   constructor(
     @repository(OcpiSessionRepository)
@@ -35,8 +36,10 @@ export class OcnBridgeApiProvider {
       },
       cdrs: {
         receiver: {
-          get: async (id: string) => {
-            const found = await this.cdrRepository.findOne({where: {id}});
+          get: async (country_code: string, party_id: string, id: string) => {
+            const found = await this.cdrRepository.findOne({
+              where: {country_code, party_id, id},
+            });
             if (!found) {
               throw Error(`No cdr with id=${id} found.`);
             }

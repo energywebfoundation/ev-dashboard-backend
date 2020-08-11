@@ -6,7 +6,7 @@ import {
   ISession,
   authMethod,
   sessionStatus,
-} from '@shareandcharge/ocn-bridge/dist/models/ocpi/session';
+} from '@shareandcharge/ocn-bridge';
 
 @model()
 export class OcpiSession extends Entity implements ISession {

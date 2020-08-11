@@ -1,5 +1,4 @@
 import {BootMixin} from '@loopback/boot';
-import {ApplicationConfig} from '@loopback/core';
 import {
   RestExplorerBindings,
   RestExplorerComponent,
@@ -12,13 +11,18 @@ import {MySequence} from './sequence';
 import {MqttBrokerComponent, OcnBridgeComponent} from './components';
 import {MqttDataSource, MemoryDataSource} from './datasources';
 import {Web3Provider} from './providers/web3.provider';
-import {MERKLE_ROOT_SERVICE_PROVIDER, ASSET_ACTIVATION_SERVICE} from './keys';
+import {
+  MERKLE_ROOT_SERVICE_PROVIDER,
+  ASSET_ACTIVATION_SERVICE,
+  OCN_BRIDGE_API_PROVIDER,
+  OCN_BRIDGE_DB_PROVIDER,
+  OCN_CONFIG,
+} from './keys';
 import {MerkleRootService} from './services';
 import {MerkleRootContractProvider} from './providers/merkle-root-contract.provider';
 import {BindingScope} from '@loopback/context';
 import {AssetActivationService} from './services/asset-activation.service';
-import {OcnBridgeApiProvider} from './providers';
-import {OcnBridgeDbProvider} from './providers/ocn-bridge-db.provider';
+import {OcnBridgeApiProvider, OcnBridgeDbProvider} from './providers';
 import {
   OcnConnectionRepository,
   OcpiEndpointRepository,
@@ -27,11 +31,12 @@ import {
   OcpiLocationRepository,
   OcpiTokenRepository,
 } from './repositories';
+import {EWFlexApplicationConfig} from './models/interfaces';
 
 export class EwFlexApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
 ) {
-  constructor(options: ApplicationConfig = {}) {
+  constructor(options: EWFlexApplicationConfig = {}) {
     super(options);
 
     // Set up the custom sequence
@@ -56,12 +61,13 @@ export class EwFlexApplication extends BootMixin(
     this.serviceProvider(Web3Provider);
 
     // enable connection to OCN
-    if (options.ocn) {
+    if (options.ocn?.enabled) {
+      this.bind(OCN_CONFIG).to(options.ocn);
       this.dataSource(MemoryDataSource);
-      this.bind('providers.ocnBridgeApiProvider')
+      this.bind(OCN_BRIDGE_API_PROVIDER)
         .toClass(OcnBridgeApiProvider)
         .inScope(BindingScope.SINGLETON);
-      this.bind('providers.ocnBridgeDbProvider')
+      this.bind(OCN_BRIDGE_DB_PROVIDER)
         .toClass(OcnBridgeDbProvider)
         .inScope(BindingScope.SINGLETON);
       this.repository(OcnConnectionRepository);

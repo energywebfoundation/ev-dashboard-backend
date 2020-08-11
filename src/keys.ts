@@ -2,6 +2,10 @@ export const WEB3_PROVIDER = 'providers.web3';
 export const MERKLE_ROOT_CONTRACT_PROVIDER = 'providers.merklerootcontract';
 export const MERKLE_ROOT_SERVICE_PROVIDER = 'services.merklerootservice';
 export const ASSET_ACTIVATION_SERVICE = 'services.assetactivationservice';
+export const OCN_CONFIG = 'config.ocn';
+export const OCN_BRIDGE_API_PROVIDER = 'providers.ocnBridgeApiProvider';
+export const OCN_BRIDGE_DB_PROVIDER = 'providers.ocnBridgeDbProvider';
+
 export const enum OFFER_STATE {
   PENDING = 1,
   PENDING_CONFIRM = 2,
