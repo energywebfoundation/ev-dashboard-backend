@@ -3,9 +3,11 @@ language: node_js
 dist: bionic
 node_js:
   - 'lts/*'
-install:
-  - npm install
-  - npm test
-  - npm run clean
-  - npm run build
-  # TODO: deploy
+
+# uses default install and script configuration:
+# install:
+  # - npm install
+# script:
+  # - npm test
+
+### TODO: deploy
