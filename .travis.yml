@@ -5,8 +5,9 @@ node_js:
   - 'lts/*'
 
 # uses default install and script configuration:
+# https://docs.travis-ci.com/user/languages/javascript-with-nodejs/
 # install:
-  # - npm install
+  # - npm ci
 # script:
   # - npm test
 
