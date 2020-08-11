@@ -7,7 +7,8 @@ This repository is an entrypoint to the different components that are part of th
 This backend is serving the [flex-frontend](https://github.com/energywebfoundation/flex-frontend).
 
 ## Maintainers
-**Primary**: Mani H. (@manihagh)
+- **Primary**: Mani H. (@manihagh)
+- **Secondary**: Adam S. (@adamstaveley)
 
 ## Getting Started
 
@@ -47,7 +48,7 @@ Please import this initial data in respective db source (MemoryDataSource, Redis
 Main step to update repository file located in src/repositories with correct datasource 
 
 Set datasource provider example:
-```
+```js
  constructor(
     @inject('datasources.memory') dataSource: MemoryDataSource, @repository.getter('OfferRepository') protected offerRepositoryGetter: Getter<OfferRepository>,
   ) {
@@ -58,11 +59,29 @@ Set datasource provider example:
 ```
 
 Available datasources:
-```
+```js
     - @inject('datasources.memory') dataSource: MemoryDataSource
     - @inject('datasources.pgsql') dataSource: PgsqlDataSource
     - @inject('datasources.redis') dataSource: RedisDataSource
 ```
+
+## Open Charging Network (OCN) configuration
+
+Flex can be configured to provide an interface to the OCN. This allows it to 
+receive data relating to EVs, EVSEs and charging sessions.
+
+To enable the OCN component, set an `ocn` field in your application config (i.e.
+in `index.js`) to the following:
+```js
+const config = {
+    ocn: {
+        enabled: true
+    }
+}
+```
+
+The application config should implement the `EWFlexApplicationConfig` interface. 
+All OCN values are required if `ocn.enabled` is set to `true`.
 
 ## How to Run
 
@@ -70,7 +89,11 @@ Run `npm i` to install dependencies.
 
 Run `npm run build` to build the project.
 
-Run `npm run start` to start your server.
+Run `npm run start` to start your server. If OCN integration is enabled, set the 
+two environment variables:
+
+- `OCN_IDENTITY`
+- `OCN_TOKEN_A`
 
 Open your browser and navigate to  `http://localhost:8080/`.
 

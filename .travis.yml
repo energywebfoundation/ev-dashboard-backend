@@ -8,3 +8,4 @@ install:
   - npm test
   - npm run clean
   - npm run build
+  # TODO: deploy
