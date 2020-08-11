@@ -6,6 +6,7 @@ import {
   IEvse,
   IHours,
   IEnergyMix,
+  ILocation,
 } from '@shareandcharge/ocn-bridge/dist/models/ocpi/locations';
 import {
   IDisplayText,
@@ -14,7 +15,7 @@ import {
 } from '@shareandcharge/ocn-bridge/dist/models/ocpi/common';
 
 @model()
-export class OcpiLocation extends Entity {
+export class OcpiLocation extends Entity implements ILocation {
   @property({
     type: 'number',
     id: true,
@@ -100,7 +101,7 @@ export class OcpiLocation extends Entity {
   @property({
     type: 'string',
   })
-  parking_type?: string;
+  parking_type?: "ALONG_MOTORWAY" | "PARKING_GARAGE" | "PARKING_LOT" | "ON_DRIVEWAY" | "ON_STREET" | "UNDERGROUND_GARAGE";
 
   @property({
     type: 'array',

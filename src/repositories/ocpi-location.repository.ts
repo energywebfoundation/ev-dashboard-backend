@@ -2,6 +2,7 @@ import {DefaultCrudRepository} from '@loopback/repository';
 import {OcpiLocation, OcpiLocationRelations} from '../models';
 import {MemoryDataSource} from '../datasources';
 import {inject} from '@loopback/core';
+import { ILocation } from '@shareandcharge/ocn-bridge';
 
 export class OcpiLocationRepository extends DefaultCrudRepository<
   OcpiLocation,
@@ -12,7 +13,7 @@ export class OcpiLocationRepository extends DefaultCrudRepository<
     super(OcpiLocation, dataSource);
   }
 
-  async createOrUpdate(entity: OcpiLocation) {
+  async createOrUpdate(entity: ILocation) {
     const saved = await this.findOne({
       where: {
         country_code: entity.country_code,

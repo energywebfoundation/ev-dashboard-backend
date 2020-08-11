@@ -5,3 +5,4 @@ public
 tsconfig.tsbuildinfo
 .idea
 .env
+inMemoryDB_EWFlex.json

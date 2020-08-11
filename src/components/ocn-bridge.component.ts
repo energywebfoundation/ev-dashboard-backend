@@ -19,6 +19,8 @@ import {
   OCN_BRIDGE_API_PROVIDER,
   OCN_BRIDGE_DB_PROVIDER,
 } from '../keys';
+import { OcpiTokenRepository, OcpiLocationRepository } from '../repositories';
+import { repository } from '@loopback/repository';
 
 export class OcnBridgeComponent implements Component {
   private config: IBridgeConfigurationOptions;
@@ -30,6 +32,8 @@ export class OcnBridgeComponent implements Component {
     @inject(OCN_CONFIG) partialConfig: PartialOcnConfig,
     @inject(OCN_BRIDGE_API_PROVIDER) apiProvider: OcnBridgeApiProvider,
     @inject(OCN_BRIDGE_DB_PROVIDER) dbProvider: OcnBridgeDbProvider,
+    @repository(OcpiTokenRepository) private tokenRepository: OcpiTokenRepository,
+    @repository(OcpiLocationRepository) private locationRepository: OcpiLocationRepository
   ) {
     console.info('OcnBridge component is initialized');
 
@@ -60,7 +64,7 @@ export class OcnBridgeComponent implements Component {
       pluggableDB: dbProvider.value(),
       pluggableRegistry: this.registry,
       logger: true,
-      //   signatures: true,
+      //   signatures: true, # TODO: fix in bridge; enable
       dryRun: false,
       signer: config.identity,
       tokenA: config.tokenA,
@@ -83,17 +87,26 @@ export class OcnBridgeComponent implements Component {
       await this.registry.permissions.setService(name, '', permissions);
     }
 
-    // TODO: use requestService to fetch locations and tokens
-    const tokens = await this.bridge.requests.getTokens({
+    // TODO: configure cron task to fetch e.g. once per day (?)
+    // TODO: configure MSP and CPO (and whitelist them)
+
+    // fetch tokens (device: EV) from MSP
+    const tokensResponse = await this.bridge.requests.getTokens({
       country_code: 'CH',
       party_id: 'MSP',
     });
-    console.log('OcnBridge found', tokens.data?.length, 'tokens');
-    const locations = await this.bridge.requests.getLocations({
+    for (const token of tokensResponse?.data || []) {
+        await this.tokenRepository.createOrUpdate(token)
+    }
+    
+    // fetch locations (device: EVSE) from CPO
+    const locationsResponse = await this.bridge.requests.getLocations({
       country_code: 'CH',
       party_id: 'CPO',
     });
-    console.log('OcnBridge found', locations.data?.length, 'locations');
+    for (const location of locationsResponse?.data || []) {
+        await this.locationRepository.createOrUpdate(location)
+    }
   }
 
   async stop() {

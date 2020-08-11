@@ -2,6 +2,7 @@ import {DefaultCrudRepository} from '@loopback/repository';
 import {OcpiToken, OcpiTokenRelations} from '../models';
 import {MemoryDataSource} from '../datasources';
 import {inject} from '@loopback/core';
+import { IToken } from '@shareandcharge/ocn-bridge';
 
 export class OcpiTokenRepository extends DefaultCrudRepository<
   OcpiToken,
@@ -12,7 +13,7 @@ export class OcpiTokenRepository extends DefaultCrudRepository<
     super(OcpiToken, dataSource);
   }
 
-  async createOrUpdate(entity: OcpiToken) {
+  async createOrUpdate(entity: IToken) {
     const saved = await this.findOne({
       where: {
         country_code: entity.country_code,

@@ -1,7 +1,8 @@
 import {Entity, model, property} from '@loopback/repository';
+import { IToken, tokenType } from '@shareandcharge/ocn-bridge';
 
 @model()
-export class OcpiToken extends Entity {
+export class OcpiToken extends Entity implements IToken {
   @property({
     type: 'number',
     id: true,
@@ -31,7 +32,7 @@ export class OcpiToken extends Entity {
     type: 'string',
     required: true,
   })
-  type: string;
+  type: tokenType;
 
   @property({
     type: 'string',
