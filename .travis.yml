@@ -4,6 +4,9 @@ dist: bionic
 node_js:
   - 'lts/*'
 
+before_install:
+  - cp inMemoryDB_EWFlex.default.json inMemoryDB_EWFlex.json
+
 # uses default install and script configuration:
 # https://docs.travis-ci.com/user/languages/javascript-with-nodejs/
 # install:
