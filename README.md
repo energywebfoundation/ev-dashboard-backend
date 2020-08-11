@@ -37,7 +37,7 @@ Currently 3 type of db configuration is provided
 
 All types of datasource providers require initial data to be setup
 1. In-memory (default)
-    - initial file are located at inMemoryDB_EWFlex.json
+    - initial file are located at inMemoryDB_EWFlex.json (needs to be copied from the .default.json file)
 2. Postgres
     - initial file are located at ew-flex.sql
 3. Redis
@@ -86,6 +86,8 @@ All OCN values are required if `ocn.enabled` is set to `true`.
 ## How to Run
 
 Run `npm i` to install dependencies.
+
+Run `cp inMemoryDB_EWFlex.default.json inMemoryDB_EWFlex.json` to init db
 
 Run `npm run build` to build the project.
 
