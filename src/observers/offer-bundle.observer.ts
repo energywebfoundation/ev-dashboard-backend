@@ -36,10 +36,7 @@ export class OfferBundleSchedulerObserver implements LifeCycleObserver {
   private webSocket: Socket;
   constructor(
     @inject(CoreBindings.APPLICATION_INSTANCE) private app: Application,
-    @repository(OfferRepository) public offerRepository: OfferRepository,
-    @inject(MERKLE_ROOT_SERVICE_PROVIDER)
-    private merkleRootService: MerkleRootService,
-    @inject(MERKLE_ROOT_CONTRACT_PROVIDER) protected connector: any,
+    @repository(OfferRepository) public offerRepository: OfferRepository,    
     @repository(OfferBundleRepository)
     public offerBundleRepository: OfferBundleRepository,
     @repository(ConstraintsRepository)
@@ -217,18 +214,18 @@ export class OfferBundleSchedulerObserver implements LifeCycleObserver {
                       _recentOffers.forEach(offer => {
                         _id.push(String(offer.id));
                       });
-                      offerBundle.rootHash = await this.merkleRootService.generate(
-                        _id,
-                      );
-                      offerBundle.uuid = uuid();
-                      this.connector.contract.methods
-                        .addMR(
-                          offerBundle.uuid,
-                          new Date().getTime(),
-                          '0x' + offerBundle.rootHash,
-                        )
-                        .send({from: config.options.defaultAccount});
-                      console.log(offerBundle);
+                      // offerBundle.rootHash = await this.merkleRootService.generate(
+                      //   _id,
+                      // );
+                      // offerBundle.uuid = uuid();
+                      // this.connector.contract.methods
+                      //   .addMR(
+                      //     offerBundle.uuid,
+                      //     new Date().getTime(),
+                      //     '0x' + offerBundle.rootHash,
+                      //   )
+                      //   .send({from: config.options.defaultAccount});
+                      // console.log(offerBundle);
                       // this.offerBundleRepository.create(offerBundle.offers[0]);
                       this.offerBundleRepository
                         .create(offerBundle)
