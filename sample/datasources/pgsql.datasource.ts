@@ -18,7 +18,8 @@ interface PgsqlConfig {
 }
 
 @lifeCycleObserver('datasource')
-export class PgsqlDataSource extends juggler.DataSource
+export class PgsqlDataSource
+  extends juggler.DataSource
   implements LifeCycleObserver {
   static dataSourceName = 'pgsql';
 

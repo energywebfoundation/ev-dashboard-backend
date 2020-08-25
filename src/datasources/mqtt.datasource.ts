@@ -8,7 +8,8 @@ import {juggler} from '@loopback/repository';
 import config from './mqtt.datasource.config.json';
 
 @lifeCycleObserver('datasource')
-export class MqttDataSource extends juggler.DataSource
+export class MqttDataSource
+  extends juggler.DataSource
   implements LifeCycleObserver {
   static dataSourceName = 'mqtt';
 

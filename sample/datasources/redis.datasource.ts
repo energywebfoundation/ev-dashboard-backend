@@ -15,7 +15,8 @@ interface RedisConfig {
 }
 
 @lifeCycleObserver('datasource')
-export class RedisDataSource extends juggler.DataSource
+export class RedisDataSource
+  extends juggler.DataSource
   implements LifeCycleObserver {
   static dataSourceName = 'redis';
 
