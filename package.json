@@ -62,7 +62,7 @@
     "@loopback/rest": "^5.2.1",
     "@loopback/rest-explorer": "^2.2.7",
     "@loopback/service-proxy": "^2.3.5",
-    "@shareandcharge/ocn-bridge": "git+https://github.com/energywebfoundation/ocn-bridge.git#improvements",
+    "@shareandcharge/ocn-bridge": "git+https://github.com/energywebfoundation/ocn-bridge.git#v2",
     "@types/cron": "^1.7.1",
     "aedes": "^0.40.1",
     "cron": "^1.8.2",

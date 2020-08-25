@@ -2,7 +2,7 @@ import {DefaultCrudRepository} from '@loopback/repository';
 import {OcpiToken, OcpiTokenRelations} from '../models';
 import {MemoryDataSource} from '../datasources';
 import {inject} from '@loopback/core';
-import { IToken } from '@shareandcharge/ocn-bridge';
+import {IToken} from '@shareandcharge/ocn-bridge';
 
 export class OcpiTokenRepository extends DefaultCrudRepository<
   OcpiToken,

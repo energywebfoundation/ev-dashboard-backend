@@ -19,8 +19,8 @@ import {
   OCN_BRIDGE_API_PROVIDER,
   OCN_BRIDGE_DB_PROVIDER,
 } from '../keys';
-import { OcpiTokenRepository, OcpiLocationRepository } from '../repositories';
-import { repository } from '@loopback/repository';
+import {OcpiTokenRepository, OcpiLocationRepository} from '../repositories';
+import {repository} from '@loopback/repository';
 
 export class OcnBridgeComponent implements Component {
   private config: IBridgeConfigurationOptions;
@@ -32,8 +32,10 @@ export class OcnBridgeComponent implements Component {
     @inject(OCN_CONFIG) partialConfig: PartialOcnConfig,
     @inject(OCN_BRIDGE_API_PROVIDER) apiProvider: OcnBridgeApiProvider,
     @inject(OCN_BRIDGE_DB_PROVIDER) dbProvider: OcnBridgeDbProvider,
-    @repository(OcpiTokenRepository) private tokenRepository: OcpiTokenRepository,
-    @repository(OcpiLocationRepository) private locationRepository: OcpiLocationRepository
+    @repository(OcpiTokenRepository)
+    private tokenRepository: OcpiTokenRepository,
+    @repository(OcpiLocationRepository)
+    private locationRepository: OcpiLocationRepository,
   ) {
     console.info('OcnBridge component is initialized');
 
@@ -64,7 +66,7 @@ export class OcnBridgeComponent implements Component {
       pluggableDB: dbProvider.value(),
       pluggableRegistry: this.registry,
       logger: true,
-      //   signatures: true, # TODO: fix in bridge; enable
+      signatures: true, // TODO: fix in bridge; enable
       dryRun: false,
       signer: config.identity,
       tokenA: config.tokenA,
@@ -88,7 +90,7 @@ export class OcnBridgeComponent implements Component {
     }
 
     // TODO: configure cron task to fetch e.g. once per day (?)
-    // TODO: configure MSP and CPO (and whitelist them)
+    // TODO: configurable MSP and CPO (define whom and whitelist them)
 
     // fetch tokens (device: EV) from MSP
     const tokensResponse = await this.bridge.requests.getTokens({
@@ -96,16 +98,16 @@ export class OcnBridgeComponent implements Component {
       party_id: 'MSP',
     });
     for (const token of tokensResponse?.data || []) {
-        await this.tokenRepository.createOrUpdate(token)
+      await this.tokenRepository.createOrUpdate(token);
     }
-    
+
     // fetch locations (device: EVSE) from CPO
     const locationsResponse = await this.bridge.requests.getLocations({
       country_code: 'CH',
       party_id: 'CPO',
     });
     for (const location of locationsResponse?.data || []) {
-        await this.locationRepository.createOrUpdate(location)
+      await this.locationRepository.createOrUpdate(location);
     }
   }
 

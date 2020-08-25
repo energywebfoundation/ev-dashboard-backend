@@ -101,7 +101,13 @@ export class OcpiLocation extends Entity implements ILocation {
   @property({
     type: 'string',
   })
-  parking_type?: "ALONG_MOTORWAY" | "PARKING_GARAGE" | "PARKING_LOT" | "ON_DRIVEWAY" | "ON_STREET" | "UNDERGROUND_GARAGE";
+  parking_type?:
+    | 'ALONG_MOTORWAY'
+    | 'PARKING_GARAGE'
+    | 'PARKING_LOT'
+    | 'ON_DRIVEWAY'
+    | 'ON_STREET'
+    | 'UNDERGROUND_GARAGE';
 
   @property({
     type: 'array',

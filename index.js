@@ -18,12 +18,12 @@ if (require.main === module) {
       host: process.env.HOST,
     },
     ocn: {
-      enabled: true,
+      enabled: false,
       // OCN environment: one of 'local', 'volta' or 'prod'
       stage: 'local',
       // URL as accessible by OCN node
       bridgeURL: 'http://localhost:8090',
-      // URL as accessible by bridge 
+      // URL as accessible by bridge
       nodeURL: 'http://localhost:8100',
       // The private key which registers Flex on the OCN; signs OCPI messages
       // note: stored in memory for convenience; will be replaced with key manager

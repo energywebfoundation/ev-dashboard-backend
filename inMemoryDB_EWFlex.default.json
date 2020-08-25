@@ -9,7 +9,7 @@
     "Participant": 1,
     "OfferState": 8,
     "OfferBundleState": 4,
-    "OcnConnection": 2,
+    "OcnConnection": 1,
     "OcpiEndpoint": 1,
     "OcpiToken": 1,
     "OcpiLocation": 1,

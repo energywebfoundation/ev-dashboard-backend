@@ -2,7 +2,7 @@ import {DefaultCrudRepository} from '@loopback/repository';
 import {OcpiLocation, OcpiLocationRelations} from '../models';
 import {MemoryDataSource} from '../datasources';
 import {inject} from '@loopback/core';
-import { ILocation } from '@shareandcharge/ocn-bridge';
+import {ILocation} from '@shareandcharge/ocn-bridge';
 
 export class OcpiLocationRepository extends DefaultCrudRepository<
   OcpiLocation,
