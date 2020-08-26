@@ -27,7 +27,6 @@ import {
   OcnConnectionRepository,
   OcpiEndpointRepository,
   OcpiSessionRepository,
-  OcpiCdrRepository,
   OcpiLocationRepository,
   OcpiTokenRepository,
 } from './repositories';
@@ -73,7 +72,6 @@ export class EwFlexApplication extends BootMixin(
       this.repository(OcnConnectionRepository);
       this.repository(OcpiEndpointRepository);
       this.repository(OcpiSessionRepository);
-      this.repository(OcpiCdrRepository);
       this.repository(OcpiTokenRepository);
       this.repository(OcpiLocationRepository);
       this.component(OcnBridgeComponent);

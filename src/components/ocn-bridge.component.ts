@@ -59,7 +59,7 @@ export class OcnBridgeComponent implements Component {
       ],
       modules: {
         implementation: ModuleImplementation.CUSTOM,
-        receiver: ['sessions', 'cdrs'],
+        receiver: ['sessions'],
         sender: [],
       },
       pluggableAPI: apiProvider.value(),
@@ -84,8 +84,9 @@ export class OcnBridgeComponent implements Component {
     );
     if (!hasSetPermissions) {
       const name = this.config.roles[0].business_details.name;
-      // https://bitbucket.org/shareandcharge/ocn-registry/src/develop/Permissions.mdnp
-      const permissions = [6, 8];
+      // https://bitbucket.org/shareandcharge/ocn-registry/src/develop/Permissions.md
+      // 6 = node forwards sessions receiver requests
+      const permissions = [6];
       await this.registry.permissions.setService(name, '', permissions);
     }
 
@@ -97,6 +98,11 @@ export class OcnBridgeComponent implements Component {
       country_code: 'CH',
       party_id: 'MSP',
     });
+    console.info(
+      'OcnBridge received',
+      tokensResponse.data?.length || 0,
+      'tokens',
+    );
     for (const token of tokensResponse?.data || []) {
       await this.tokenRepository.createOrUpdate(token);
     }
@@ -106,6 +112,11 @@ export class OcnBridgeComponent implements Component {
       country_code: 'CH',
       party_id: 'CPO',
     });
+    console.info(
+      'OcnBridge received',
+      locationsResponse.data?.length || 0,
+      'locations',
+    );
     for (const location of locationsResponse?.data || []) {
       await this.locationRepository.createOrUpdate(location);
     }

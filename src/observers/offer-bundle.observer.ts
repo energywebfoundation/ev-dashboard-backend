@@ -12,19 +12,9 @@ import {
   OfferBundleRepository,
   ConstraintsRepository,
 } from '../repositories';
-import {
-  MERKLE_ROOT_SERVICE_PROVIDER,
-  OFFER_TYPE,
-  OFFER_STATE,
-  BUNDLE_STATE,
-  MERKLE_ROOT_CONTRACT_PROVIDER,
-  CONSTRAINTS,
-} from '../keys';
-import {MerkleRootService} from '../services';
+import {OFFER_TYPE, OFFER_STATE, BUNDLE_STATE, CONSTRAINTS} from '../keys';
 import {Socket} from 'socket.io';
 import {OfferBundle, Offer} from '../models';
-import * as config from '../datasources/merkle-root-contract.datasource.config.json';
-import {uuid} from 'uuidv4';
 import {find, unset} from 'lodash';
 
 /**
@@ -36,7 +26,7 @@ export class OfferBundleSchedulerObserver implements LifeCycleObserver {
   private webSocket: Socket;
   constructor(
     @inject(CoreBindings.APPLICATION_INSTANCE) private app: Application,
-    @repository(OfferRepository) public offerRepository: OfferRepository,    
+    @repository(OfferRepository) public offerRepository: OfferRepository,
     @repository(OfferBundleRepository)
     public offerBundleRepository: OfferBundleRepository,
     @repository(ConstraintsRepository)

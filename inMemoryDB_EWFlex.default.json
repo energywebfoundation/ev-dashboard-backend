@@ -13,8 +13,7 @@
     "OcpiEndpoint": 1,
     "OcpiToken": 1,
     "OcpiLocation": 1,
-    "OcpiSession": 1,
-    "OcpiCdr": 1
+    "OcpiSession": 1
   },
   "models": {
     "Offer": {},
@@ -42,7 +41,6 @@
     "OcpiEndpoint": {},
     "OcpiToken": {},
     "OcpiLocation": {},
-    "OcpiSession": {},
-    "OcpiCdr": {}
+    "OcpiSession": {}
   }
 }

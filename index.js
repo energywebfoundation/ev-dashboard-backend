@@ -18,7 +18,7 @@ if (require.main === module) {
       host: process.env.HOST,
     },
     ocn: {
-      enabled: false,
+      enabled: true,
       // OCN environment: one of 'local', 'volta' or 'prod'
       stage: 'local',
       // URL as accessible by OCN node
