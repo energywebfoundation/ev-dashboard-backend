@@ -1,26 +1,26 @@
-import {Component, inject} from '@loopback/core';
+import { Component, inject } from '@loopback/core';
+import { repository } from '@loopback/repository';
 import {
   DefaultRegistry,
   IBridge,
   IBridgeConfigurationOptions,
   ModuleImplementation,
   startBridge,
-  stopBridge,
+  stopBridge
 } from '@shareandcharge/ocn-bridge';
 import Web3 from 'web3';
 import {
-  OcnConfig,
-  PartialOcnConfig,
-} from '../models/interfaces/ocn-config.interface';
-import {OcnBridgeApiProvider} from '../providers';
-import {OcnBridgeDbProvider} from '../providers/ocn-bridge-db.provider';
-import {
-  OCN_CONFIG,
   OCN_BRIDGE_API_PROVIDER,
-  OCN_BRIDGE_DB_PROVIDER,
+  OCN_BRIDGE_DB_PROVIDER, OCN_CONFIG
 } from '../keys';
-import {OcpiTokenRepository, OcpiLocationRepository} from '../repositories';
-import {repository} from '@loopback/repository';
+import {
+  OcnConfig,
+  PartialOcnConfig
+} from '../models/interfaces/ocn-config.interface';
+import { OcnBridgeApiProvider } from '../providers';
+import { OcnBridgeDbProvider } from '../providers/ocn-bridge-db.provider';
+import { OcpiLocationRepository, OcpiTokenRepository } from '../repositories';
+import { CronJob } from 'cron';
 
 export class OcnBridgeComponent implements Component {
   private config: IBridgeConfigurationOptions;
@@ -90,37 +90,43 @@ export class OcnBridgeComponent implements Component {
       await this.registry.permissions.setService(name, '', permissions);
     }
 
-    // TODO: configure cron task to fetch e.g. once per day (?)
     // TODO: configurable MSP and CPO (define whom and whitelist them)
-
-    // fetch tokens (device: EV) from MSP
-    const tokensResponse = await this.bridge.requests.getTokens({
-      country_code: 'CH',
-      party_id: 'MSP',
-    });
-    console.info(
-      'OcnBridge received',
-      tokensResponse.data?.length || 0,
-      'tokens',
-    );
-    for (const token of tokensResponse?.data || []) {
-      await this.tokenRepository.createOrUpdate(token);
-    }
-
-    // fetch locations (device: EVSE) from CPO
-    const locationsResponse = await this.bridge.requests.getLocations({
-      country_code: 'CH',
-      party_id: 'CPO',
-    });
-    console.info(
-      'OcnBridge received',
-      locationsResponse.data?.length || 0,
-      'locations',
-    );
-    for (const location of locationsResponse?.data || []) {
-      await this.locationRepository.createOrUpdate(location);
-    }
+    
+    // configure cron task to retrieve device data (tokens and locations)
+    // 0 0 * * * = at midnight
+    // * * * * * = every minute
+    const job = new CronJob("0 0 * * *", async () => {
+      // fetch tokens (device: EV) from MSP
+      const tokensResponse = await this.bridge.requests.getTokens({
+        country_code: 'CH',
+        party_id: 'MSP',
+      });
+      console.info(
+        'OcnBridge received',
+        tokensResponse.data?.length || 0,
+        'tokens',
+      );
+      for (const token of tokensResponse?.data || []) {
+        await this.tokenRepository.createOrUpdate(token);
+      }
+  
+      // fetch locations (device: EVSE) from CPO
+      const locationsResponse = await this.bridge.requests.getLocations({
+        country_code: 'CH',
+        party_id: 'CPO',
+      });
+      console.info(
+        'OcnBridge received',
+        locationsResponse.data?.length || 0,
+        'locations',
+      );
+      for (const location of locationsResponse?.data || []) {
+        await this.locationRepository.createOrUpdate(location);
+      }
+    })
+    job.start()
   }
+
 
   async stop() {
     await stopBridge(this.bridge);
