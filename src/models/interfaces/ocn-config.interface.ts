@@ -1,3 +1,5 @@
+import {IOcpiParty} from '@shareandcharge/ocn-bridge';
+
 export interface PartialOcnConfig {
   enabled: boolean;
   stage?: string;
@@ -5,6 +7,8 @@ export interface PartialOcnConfig {
   identity?: string;
   nodeURL?: string;
   tokenA?: string;
+  msps?: IOcpiParty[];
+  cpos?: IOcpiParty[];
 }
 
 export interface OcnConfig {
@@ -13,4 +17,6 @@ export interface OcnConfig {
   identity: string;
   nodeURL: string;
   tokenA: string;
+  msps: IOcpiParty[];
+  cpos: IOcpiParty[];
 }

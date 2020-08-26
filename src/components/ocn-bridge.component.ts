@@ -1,29 +1,33 @@
-import { Component, inject } from '@loopback/core';
-import { repository } from '@loopback/repository';
+import {Component, inject} from '@loopback/core';
+import {repository} from '@loopback/repository';
 import {
   DefaultRegistry,
   IBridge,
   IBridgeConfigurationOptions,
   ModuleImplementation,
   startBridge,
-  stopBridge
+  stopBridge,
+  IOcpiParty,
 } from '@shareandcharge/ocn-bridge';
 import Web3 from 'web3';
 import {
   OCN_BRIDGE_API_PROVIDER,
-  OCN_BRIDGE_DB_PROVIDER, OCN_CONFIG
+  OCN_BRIDGE_DB_PROVIDER,
+  OCN_CONFIG,
 } from '../keys';
 import {
   OcnConfig,
-  PartialOcnConfig
+  PartialOcnConfig,
 } from '../models/interfaces/ocn-config.interface';
-import { OcnBridgeApiProvider } from '../providers';
-import { OcnBridgeDbProvider } from '../providers/ocn-bridge-db.provider';
-import { OcpiLocationRepository, OcpiTokenRepository } from '../repositories';
-import { CronJob } from 'cron';
+import {OcnBridgeApiProvider} from '../providers';
+import {OcnBridgeDbProvider} from '../providers/ocn-bridge-db.provider';
+import {OcpiLocationRepository, OcpiTokenRepository} from '../repositories';
+import {CronJob} from 'cron';
 
 export class OcnBridgeComponent implements Component {
   private config: IBridgeConfigurationOptions;
+  private msps: IOcpiParty[];
+  private cpos: IOcpiParty[];
   private registry: DefaultRegistry;
   private bridge: IBridge;
   private address: string;
@@ -40,6 +44,8 @@ export class OcnBridgeComponent implements Component {
     console.info('OcnBridge component is initialized');
 
     const config = this.getConfig(partialConfig);
+    this.msps = config.msps;
+    this.cpos = config.cpos;
     this.registry = new DefaultRegistry(config.stage, config.identity);
     this.address = new Web3().eth.accounts.privateKeyToAccount(
       config.identity,
@@ -91,42 +97,39 @@ export class OcnBridgeComponent implements Component {
     }
 
     // TODO: configurable MSP and CPO (define whom and whitelist them)
-    
+
     // configure cron task to retrieve device data (tokens and locations)
     // 0 0 * * * = at midnight
     // * * * * * = every minute
-    const job = new CronJob("0 0 * * *", async () => {
-      // fetch tokens (device: EV) from MSP
-      const tokensResponse = await this.bridge.requests.getTokens({
-        country_code: 'CH',
-        party_id: 'MSP',
-      });
-      console.info(
-        'OcnBridge received',
-        tokensResponse.data?.length || 0,
-        'tokens',
-      );
-      for (const token of tokensResponse?.data || []) {
-        await this.tokenRepository.createOrUpdate(token);
+    const job = new CronJob('0 0 * * *', async () => {
+      // fetch tokens (device: EV) from MSPs
+      for (const msp of this.msps) {
+        const tokensResponse = await this.bridge.requests.getTokens(msp);
+        console.info(
+          'OcnBridge received',
+          tokensResponse.data?.length || 0,
+          `MSP tokens from OCPI party ${msp.country_code} ${msp.party_id}`,
+        );
+        for (const token of tokensResponse?.data || []) {
+          await this.tokenRepository.createOrUpdate(token);
+        }
       }
-  
-      // fetch locations (device: EVSE) from CPO
-      const locationsResponse = await this.bridge.requests.getLocations({
-        country_code: 'CH',
-        party_id: 'CPO',
-      });
-      console.info(
-        'OcnBridge received',
-        locationsResponse.data?.length || 0,
-        'locations',
-      );
-      for (const location of locationsResponse?.data || []) {
-        await this.locationRepository.createOrUpdate(location);
-      }
-    })
-    job.start()
-  }
 
+      // fetch locations (device: EVSE) from CPOs
+      for (const cpo of this.cpos) {
+        const locationsResponse = await this.bridge.requests.getLocations(cpo);
+        console.info(
+          'OcnBridge received',
+          locationsResponse.data?.length || 0,
+          `CPO locations from OCPI party ${cpo.country_code} ${cpo.party_id}`,
+        );
+        for (const location of locationsResponse?.data || []) {
+          await this.locationRepository.createOrUpdate(location);
+        }
+      }
+    });
+    job.start();
+  }
 
   async stop() {
     await stopBridge(this.bridge);

@@ -31,6 +31,10 @@ if (require.main === module) {
       // OCPI "CREDENTIALS_TOKEN_A" used to initiate the credentials handshake with OCN node
       // Is invalidated after registration complete
       tokenA: process.env.OCN_TOKEN_A,
+      // Configure MSPs to retrieve tokens from
+      msps: [{country_code: 'CH', party_id: 'MSP'}],
+      // Configure CPOs to retrieve locations from
+      cpos: [{country_code: 'CH', party_id: 'CPO'}],
     },
   };
   application.main(config).catch(err => {
