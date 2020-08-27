@@ -101,7 +101,7 @@ export class OcnBridgeComponent implements Component {
     // configure cron task to retrieve device data (tokens and locations)
     // 0 0 * * * = at midnight
     // * * * * * = every minute
-    const job = new CronJob('0 0 * * *', async () => {
+    const job = new CronJob('* * * * *', async () => {
       // fetch tokens (device: EV) from MSPs
       for (const msp of this.msps) {
         const tokensResponse = await this.bridge.requests.getTokens(msp);
