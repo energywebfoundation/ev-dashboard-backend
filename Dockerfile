@@ -15,7 +15,8 @@ WORKDIR /home/node/app
 # copy everything except from .dockerignore
 COPY --chown=node . ./
 
-# install dev dependencies as well
+# install dev dependencies as well (unsafe-perm needed for ocn-bridge)
+RUN npm config set unsafe-perm true 
 RUN npm install
 
 # build in production mode
