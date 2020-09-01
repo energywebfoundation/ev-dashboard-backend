@@ -44,7 +44,6 @@ ENV NODE_ENV=production
 COPY --from=builder /home/node/app/index.js ./
 COPY --from=builder /home/node/app/dist ./dist
 COPY --from=builder /home/node/app/node_modules ./node_modules
-COPY --from=builder --chown=node /home/node/app/inMemoryDB_EWFlex.json ./
 COPY --from=builder --chown=node /home/node/app/wait-for-node.sh ./
 
 RUN chmod +x ./wait-for-node.sh
