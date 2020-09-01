@@ -35,12 +35,17 @@ services:
       - 8080:8080
       # websocket
       - 8081:8081
+      # ocn bridge
+      - 8090:8090
       # mqtt
       - 1883:1883
     volumes:
       - type: bind
         source: .
         target: /home/node/app
+    environment: 
+      OCN_IDENTITY: 0x_my_private_key
+      OCN_TOKEN_A: my_token_a
     depends_on:
       - postgres
       - redis
