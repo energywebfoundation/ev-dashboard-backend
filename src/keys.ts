@@ -1,6 +1,8 @@
 export const WEB3_PROVIDER = 'providers.web3';
 export const MERKLE_ROOT_CONTRACT_PROVIDER = 'providers.merklerootcontract';
 export const MERKLE_ROOT_SERVICE_PROVIDER = 'services.merklerootservice';
+export const REGISTRY_CONTRACT_PROVIDER = 'providers.registrycontract';
+export const REGISTRY_SERVICE_PROVIDER = 'providers.registryservice';
 export const ASSET_ACTIVATION_SERVICE = 'services.assetactivationservice';
 export const OCN_CONFIG = 'config.ocn';
 export const OCN_BRIDGE_API_PROVIDER = 'providers.ocnBridgeApiProvider';
