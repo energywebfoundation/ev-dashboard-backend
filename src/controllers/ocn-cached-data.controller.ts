@@ -1,3 +1,4 @@
+import { service } from '@loopback/core';
 import {
   repository,
 } from '@loopback/repository';
@@ -15,11 +16,13 @@ import {OcpiLocation, OcpiLocationRelations, OcpiToken, OcpiTokenRelations} from
 import {OcpiLocationRepository, OcpiTokenRepository} from '../repositories';
 import { RegistryService } from '../services/registry.service';
 
-export class OcnCachedDataControllerController {
+export class OcnCachedDataController {
   constructor(
     @repository(OcpiLocationRepository)
     public ocpiLocationRepository : OcpiLocationRepository,
+    @repository(OcpiTokenRepository)
     public ocpiTokenRepository : OcpiTokenRepository,
+    @service(RegistryService)
     public registryService : RegistryService
   ) {}
 

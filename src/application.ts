@@ -17,6 +17,7 @@ import {
   OCN_BRIDGE_API_PROVIDER,
   OCN_BRIDGE_DB_PROVIDER,
   OCN_CONFIG,
+  REGISTRY_SERVICE_PROVIDER,
 } from './keys';
 import {MerkleRootService} from './services';
 import {MerkleRootContractProvider} from './providers/merkle-root-contract.provider';
@@ -31,6 +32,8 @@ import {
   OcpiTokenRepository,
 } from './repositories';
 import {EWFlexApplicationConfig} from './models/interfaces';
+import { RegistryService } from './services/registry.service';
+import { RegistryContractProvider } from './providers/registry-contract.provider';
 
 export class EwFlexApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
@@ -56,8 +59,10 @@ export class EwFlexApplication extends BootMixin(
       .toClass(AssetActivationService)
       .inScope(BindingScope.SINGLETON);
     this.bind(MERKLE_ROOT_SERVICE_PROVIDER).toClass(MerkleRootService);
-    this.serviceProvider(MerkleRootContractProvider);
-    this.serviceProvider(Web3Provider);
+    this.service(MerkleRootContractProvider);
+    this.bind(REGISTRY_SERVICE_PROVIDER).toClass(RegistryService);
+    this.service(RegistryContractProvider);
+    this.service(Web3Provider);
 
     // enable connection to OCN
     if (options.ocn?.enabled) {

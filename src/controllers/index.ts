@@ -19,4 +19,4 @@ export * from './participant.controller';
 export * from './offer-activation-summary.controller';
 export * from './constraints.controller';
 export * from './asset-command.controller';
-export * from './ocn-cached-data-controller.controller';
+export * from './ocn-cached-data.controller';
