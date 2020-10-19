@@ -1,4 +1,4 @@
-import { service } from '@loopback/core';
+import { inject } from '@loopback/core';
 import {
   repository,
 } from '@loopback/repository';
@@ -12,17 +12,18 @@ import {
   requestBody,
 } from '@loopback/rest';
 import { IEvse } from '@shareandcharge/ocn-bridge';
+import { OCPI_LOCATION_REPOSITORY, OCPI_TOKEN_REPOSITORY, REGISTRY_SERVICE_PROVIDER } from '../keys';
 import {OcpiLocation, OcpiLocationRelations, OcpiToken, OcpiTokenRelations} from '../models';
 import {OcpiLocationRepository, OcpiTokenRepository} from '../repositories';
 import { RegistryService } from '../services/registry.service';
 
 export class OcnCachedDataController {
   constructor(
-    @repository(OcpiLocationRepository)
+    @inject(OCPI_LOCATION_REPOSITORY)
     public ocpiLocationRepository : OcpiLocationRepository,
-    @repository(OcpiTokenRepository)
+    @inject(OCPI_TOKEN_REPOSITORY)
     public ocpiTokenRepository : OcpiTokenRepository,
-    @service(RegistryService)
+    @inject(REGISTRY_SERVICE_PROVIDER)
     public registryService : RegistryService
   ) {}
 
@@ -87,15 +88,17 @@ export class OcnCachedDataController {
     },
   })
   async findEvseById(
-    @param.path.number('id') id: string,
+    @param.path.string('id') id: string,
   ): Promise<IEvse | undefined> {
     const locations = await this.ocpiLocationRepository.find();
     let evse: IEvse | undefined
 
-    locations.forEach(location => {
-      const evseMatch = location.evses?.find(evse => evse.evse_id === id)
-      evse = evseMatch
-    })
+    for (const location of locations) {
+      evse = location.evses?.find(evse => evse.evse_id === id)
+      if (evse) {
+        break
+      }
+    }
 
     return evse
   }
@@ -150,7 +153,7 @@ export class OcnCachedDataController {
     },
   })
   async findVehicleById(
-    @param.path.number('id') id: string,
+    @param.path.string('id') id: string,
   ): Promise<OcpiToken | undefined> {
     const token = await this.ocpiTokenRepository.findOne({ where: { contract_id: id }});
     return token ?? undefined

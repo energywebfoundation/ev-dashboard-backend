@@ -34,7 +34,7 @@ if (require.main === module) {
       // Configure MSPs to retrieve tokens from
       msps: [{country_code: 'DE', party_id: 'EVM'}],
       // Configure CPOs to retrieve locations from
-      cpos: [{country_code: 'DE', party_id: 'EVC'}],
+      cpos: [{country_code: 'DE', party_id: 'EVC'}]
     },
   };
   application.main(config).catch(err => {

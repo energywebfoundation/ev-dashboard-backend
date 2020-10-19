@@ -18,6 +18,8 @@ import {
   OCN_BRIDGE_DB_PROVIDER,
   OCN_CONFIG,
   REGISTRY_SERVICE_PROVIDER,
+  OCPI_LOCATION_REPOSITORY,
+  OCPI_TOKEN_REPOSITORY,
 } from './keys';
 import {MerkleRootService} from './services';
 import {MerkleRootContractProvider} from './providers/merkle-root-contract.provider';
@@ -77,8 +79,12 @@ export class EwFlexApplication extends BootMixin(
       this.repository(OcnConnectionRepository);
       this.repository(OcpiEndpointRepository);
       this.repository(OcpiSessionRepository);
-      this.repository(OcpiTokenRepository);
-      this.repository(OcpiLocationRepository);
+      this.bind(OCPI_LOCATION_REPOSITORY)
+        .toClass(OcpiLocationRepository)
+        .inScope(BindingScope.SINGLETON);
+      this.bind(OCPI_TOKEN_REPOSITORY)
+        .toClass(OcpiTokenRepository)
+        .inScope(BindingScope.SINGLETON);
       this.component(OcnBridgeComponent);
     }
 

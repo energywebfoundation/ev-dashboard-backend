@@ -1,8 +1,8 @@
-{
+export default {
   "name": "RegistryContract",
   "connector": "@gdbc/loopback-connector-contract-web3",
-  "provider": "https://volta-internal-archive.energyweb.org/",
-  "address": "0x8d80504617eB17816b91610Fb2a0274Dc70f193f",
+  "provider": process.env.EV_REGISTRY_PROVIDER || "https://volta-internal-archive.energyweb.org/",
+  "address": process.env.EV_REGISTRY_ADDRESS || "0x8d80504617eB17816b91610Fb2a0274Dc70f193f",
   "abi": [
     {
       "inputs": [

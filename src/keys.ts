@@ -7,6 +7,9 @@ export const ASSET_ACTIVATION_SERVICE = 'services.assetactivationservice';
 export const OCN_CONFIG = 'config.ocn';
 export const OCN_BRIDGE_API_PROVIDER = 'providers.ocnBridgeApiProvider';
 export const OCN_BRIDGE_DB_PROVIDER = 'providers.ocnBridgeDbProvider';
+export const OCPI_LOCATION_REPOSITORY = 'repositories.ocpiLocationRepository';
+export const OCPI_TOKEN_REPOSITORY = 'repositories.ocpiTokenRepository';
+
 
 export const enum OFFER_STATE {
   PENDING = 1,

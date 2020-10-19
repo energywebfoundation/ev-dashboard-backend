@@ -6,7 +6,7 @@ import {REGISTRY_CONTRACT_PROVIDER} from '../keys';
 @bind.provider({tags: {key: REGISTRY_CONTRACT_PROVIDER}})
 export class RegistryContractProvider implements Provider<any> {
   constructor(
-    @inject('datasources.MerkleRootContract')
+    @inject('datasources.RegistryContract')
     protected dataSource: juggler.DataSource = new RegistryContractDataSource(),
   ) {}
 
