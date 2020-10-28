@@ -8,6 +8,7 @@ if (require.main === module) {
     rest: {
       port: +(process.env.PORT || 8080),
       host: process.env.HOST,
+      basePath: process.env.BASE_PATH || '/api',
       gracePeriodForClose: 5000,
       openApiSpec: {
         setServersFromRequest: true,
