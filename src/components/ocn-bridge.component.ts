@@ -14,6 +14,8 @@ import {
   OCN_BRIDGE_API_PROVIDER,
   OCN_BRIDGE_DB_PROVIDER,
   OCN_CONFIG,
+  OCPI_LOCATION_REPOSITORY,
+  OCPI_TOKEN_REPOSITORY,
 } from '../keys';
 import {
   OcnConfig,
@@ -36,9 +38,9 @@ export class OcnBridgeComponent implements Component {
     @inject(OCN_CONFIG) partialConfig: PartialOcnConfig,
     @inject(OCN_BRIDGE_API_PROVIDER) apiProvider: OcnBridgeApiProvider,
     @inject(OCN_BRIDGE_DB_PROVIDER) dbProvider: OcnBridgeDbProvider,
-    @repository(OcpiTokenRepository)
+    @inject(OCPI_TOKEN_REPOSITORY)
     private tokenRepository: OcpiTokenRepository,
-    @repository(OcpiLocationRepository)
+    @inject(OCPI_LOCATION_REPOSITORY)
     private locationRepository: OcpiLocationRepository,
   ) {
     console.info('OcnBridge component is initialized');

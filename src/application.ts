@@ -17,6 +17,9 @@ import {
   OCN_BRIDGE_API_PROVIDER,
   OCN_BRIDGE_DB_PROVIDER,
   OCN_CONFIG,
+  REGISTRY_SERVICE_PROVIDER,
+  OCPI_LOCATION_REPOSITORY,
+  OCPI_TOKEN_REPOSITORY,
 } from './keys';
 import {MerkleRootService} from './services';
 import {MerkleRootContractProvider} from './providers/merkle-root-contract.provider';
@@ -31,6 +34,8 @@ import {
   OcpiTokenRepository,
 } from './repositories';
 import {EWFlexApplicationConfig} from './models/interfaces';
+import { RegistryService } from './services/registry.service';
+import { RegistryContractProvider } from './providers/registry-contract.provider';
 
 export class EwFlexApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
@@ -56,24 +61,30 @@ export class EwFlexApplication extends BootMixin(
       .toClass(AssetActivationService)
       .inScope(BindingScope.SINGLETON);
     this.bind(MERKLE_ROOT_SERVICE_PROVIDER).toClass(MerkleRootService);
-    this.serviceProvider(MerkleRootContractProvider);
-    this.serviceProvider(Web3Provider);
-
+    this.service(MerkleRootContractProvider);
+    this.service(Web3Provider);
+    
     // enable connection to OCN
     if (options.ocn?.enabled) {
       this.bind(OCN_CONFIG).to(options.ocn);
       this.dataSource(MemoryDataSource);
       this.bind(OCN_BRIDGE_API_PROVIDER)
-        .toClass(OcnBridgeApiProvider)
-        .inScope(BindingScope.SINGLETON);
+      .toClass(OcnBridgeApiProvider)
+      .inScope(BindingScope.SINGLETON);
       this.bind(OCN_BRIDGE_DB_PROVIDER)
-        .toClass(OcnBridgeDbProvider)
-        .inScope(BindingScope.SINGLETON);
+      .toClass(OcnBridgeDbProvider)
+      .inScope(BindingScope.SINGLETON);
       this.repository(OcnConnectionRepository);
       this.repository(OcpiEndpointRepository);
       this.repository(OcpiSessionRepository);
-      this.repository(OcpiTokenRepository);
-      this.repository(OcpiLocationRepository);
+      this.bind(OCPI_LOCATION_REPOSITORY)
+      .toClass(OcpiLocationRepository)
+      .inScope(BindingScope.SINGLETON);
+      this.bind(OCPI_TOKEN_REPOSITORY)
+      .toClass(OcpiTokenRepository)
+      .inScope(BindingScope.SINGLETON);
+      this.bind(REGISTRY_SERVICE_PROVIDER).toClass(RegistryService);
+      this.service(RegistryContractProvider);
       this.component(OcnBridgeComponent);
     }
 
