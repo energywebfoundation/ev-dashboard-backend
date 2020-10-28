@@ -62,29 +62,29 @@ export class EwFlexApplication extends BootMixin(
       .inScope(BindingScope.SINGLETON);
     this.bind(MERKLE_ROOT_SERVICE_PROVIDER).toClass(MerkleRootService);
     this.service(MerkleRootContractProvider);
-    this.bind(REGISTRY_SERVICE_PROVIDER).toClass(RegistryService);
-    this.service(RegistryContractProvider);
     this.service(Web3Provider);
-
+    
     // enable connection to OCN
     if (options.ocn?.enabled) {
       this.bind(OCN_CONFIG).to(options.ocn);
       this.dataSource(MemoryDataSource);
       this.bind(OCN_BRIDGE_API_PROVIDER)
-        .toClass(OcnBridgeApiProvider)
-        .inScope(BindingScope.SINGLETON);
+      .toClass(OcnBridgeApiProvider)
+      .inScope(BindingScope.SINGLETON);
       this.bind(OCN_BRIDGE_DB_PROVIDER)
-        .toClass(OcnBridgeDbProvider)
-        .inScope(BindingScope.SINGLETON);
+      .toClass(OcnBridgeDbProvider)
+      .inScope(BindingScope.SINGLETON);
       this.repository(OcnConnectionRepository);
       this.repository(OcpiEndpointRepository);
       this.repository(OcpiSessionRepository);
       this.bind(OCPI_LOCATION_REPOSITORY)
-        .toClass(OcpiLocationRepository)
-        .inScope(BindingScope.SINGLETON);
+      .toClass(OcpiLocationRepository)
+      .inScope(BindingScope.SINGLETON);
       this.bind(OCPI_TOKEN_REPOSITORY)
-        .toClass(OcpiTokenRepository)
-        .inScope(BindingScope.SINGLETON);
+      .toClass(OcpiTokenRepository)
+      .inScope(BindingScope.SINGLETON);
+      this.bind(REGISTRY_SERVICE_PROVIDER).toClass(RegistryService);
+      this.service(RegistryContractProvider);
       this.component(OcnBridgeComponent);
     }
 

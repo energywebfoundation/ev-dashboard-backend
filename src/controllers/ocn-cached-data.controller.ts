@@ -1,21 +1,20 @@
 import { inject } from '@loopback/core';
 import {
-  repository,
-} from '@loopback/repository';
-import {
   param,
   get,
   getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
 } from '@loopback/rest';
-import { IEvse } from '@shareandcharge/ocn-bridge';
+import { IEvse, IGeoLocation } from '@shareandcharge/ocn-bridge';
 import { OCPI_LOCATION_REPOSITORY, OCPI_TOKEN_REPOSITORY, REGISTRY_SERVICE_PROVIDER } from '../keys';
 import {OcpiLocation, OcpiLocationRelations, OcpiToken, OcpiTokenRelations} from '../models';
 import {OcpiLocationRepository, OcpiTokenRepository} from '../repositories';
 import { RegistryService } from '../services/registry.service';
+
+interface IEvseBasic {
+  id: string;
+  available: boolean;
+  coordinates: IGeoLocation;
+}
 
 export class OcnCachedDataController {
   constructor(
@@ -45,9 +44,9 @@ export class OcnCachedDataController {
       },
     },
   })
-  async findEvse(
+  async findEvses(
     @param.query.string('owner') owner?: string
-  ): Promise<string[]> {
+  ): Promise<IEvseBasic[]> {
     // TODO: if owner present, check registry for country_code/party_id
     let locations: (OcpiLocation & OcpiLocationRelations)[]
 
@@ -58,16 +57,19 @@ export class OcnCachedDataController {
       locations = await this.ocpiLocationRepository.find();
     }
     
-    const evses: string[] = []
+    const evses: IEvseBasic[] = []
 
-    locations
-      .map(location => location.evses)
-      .flat()
-      .forEach(evse => {
+    for (const location of locations) {
+      for (const evse of location.evses ?? []) {
         if (evse?.evse_id) {
-          evses.push(evse.evse_id)
+          evses.push({
+            id: evse.evse_id,
+            available: evse.status !== 'CHARGING',
+            coordinates: location.coordinates
+          })
         }
-      })
+      }
+    }
 
     return evses;
   }
