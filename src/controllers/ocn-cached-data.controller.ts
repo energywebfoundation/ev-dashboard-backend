@@ -16,6 +16,10 @@ interface IEvseBasic {
   coordinates: IGeoLocation;
 }
 
+interface IVehicleBasic {
+  id: string; // ocpi token uid = vehicle id
+}
+
 export class OcnCachedDataController {
   constructor(
     @inject(OCPI_LOCATION_REPOSITORY)
@@ -37,7 +41,7 @@ export class OcnCachedDataController {
           'application/json': {
             schema: {
               type: 'array',
-              items: 'string',
+              items: 'object',
             },
           },
         },
@@ -116,7 +120,7 @@ export class OcnCachedDataController {
           'application/json': {
             schema: {
               type: 'array',
-              items: 'string',
+              items: 'object',
             },
           },
         },
@@ -125,7 +129,7 @@ export class OcnCachedDataController {
   })
   async findVehicles(
     @param.query.string('owner') owner?: string
-  ): Promise<string[]> {
+  ): Promise<IVehicleBasic[]> {
     // TODO: if owner present, check registry for country_code/party_id
     let tokens: (OcpiToken & OcpiTokenRelations)[]
 
@@ -136,7 +140,7 @@ export class OcnCachedDataController {
       tokens = await this.ocpiTokenRepository.find();
     }
 
-    return tokens.map(token => token.contract_id);
+    return tokens.map(token => ({ id: token.uid }));
   }
 
   /**
