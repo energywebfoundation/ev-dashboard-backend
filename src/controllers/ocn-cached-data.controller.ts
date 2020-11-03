@@ -14,6 +14,13 @@ interface IEvseBasic {
   id: string;
   available: boolean;
   coordinates: IGeoLocation;
+  operator: string;
+}
+
+interface IVehicleBasic {
+  id: string; // ocpi token uid = vehicle id
+  type: string;
+  connected: boolean;
 }
 
 export class OcnCachedDataController {
@@ -37,7 +44,7 @@ export class OcnCachedDataController {
           'application/json': {
             schema: {
               type: 'array',
-              items: 'string',
+              items: 'object',
             },
           },
         },
@@ -65,7 +72,9 @@ export class OcnCachedDataController {
           evses.push({
             id: evse.evse_id,
             available: evse.status !== 'CHARGING',
-            coordinates: location.coordinates
+            coordinates: location.coordinates,
+            operator: location.operator?.name 
+              ?? `Unknown operator (${location.country_code}:${location.party_id}})`
           })
         }
       }
@@ -116,7 +125,7 @@ export class OcnCachedDataController {
           'application/json': {
             schema: {
               type: 'array',
-              items: 'string',
+              items: 'object',
             },
           },
         },
@@ -125,7 +134,7 @@ export class OcnCachedDataController {
   })
   async findVehicles(
     @param.query.string('owner') owner?: string
-  ): Promise<string[]> {
+  ): Promise<IVehicleBasic[]> {
     // TODO: if owner present, check registry for country_code/party_id
     let tokens: (OcpiToken & OcpiTokenRelations)[]
 
@@ -136,7 +145,11 @@ export class OcnCachedDataController {
       tokens = await this.ocpiTokenRepository.find();
     }
 
-    return tokens.map(token => token.contract_id);
+    return tokens.map(token => ({ 
+      id: token.uid,
+      type: 'Orange Hatchback',
+      connected: false
+    }));
   }
 
   /**
