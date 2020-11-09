@@ -1,5 +1,5 @@
-import {Component, inject} from '@loopback/core';
-import {repository} from '@loopback/repository';
+import { Component, inject } from '@loopback/core';
+import { repository } from '@loopback/repository';
 import {
   DefaultRegistry,
   IBridge,
@@ -16,15 +16,17 @@ import {
   OCN_CONFIG,
   OCPI_LOCATION_REPOSITORY,
   OCPI_TOKEN_REPOSITORY,
+  OCN_CACHE_METADATA_REPOSITORY,
 } from '../keys';
 import {
   OcnConfig,
   PartialOcnConfig,
 } from '../models/interfaces/ocn-config.interface';
-import {OcnBridgeApiProvider} from '../providers';
-import {OcnBridgeDbProvider} from '../providers/ocn-bridge-db.provider';
-import {OcpiLocationRepository, OcpiTokenRepository} from '../repositories';
-import {CronJob} from 'cron';
+import { OcnBridgeApiProvider } from '../providers';
+import { OcnBridgeDbProvider } from '../providers/ocn-bridge-db.provider';
+import { OcnCacheMetadataRepository, OcpiLocationRepository, OcpiTokenRepository } from '../repositories';
+import { OcnCacheMetadata } from '../models';
+import { CronJob } from 'cron';
 
 export class OcnBridgeComponent implements Component {
   private config: IBridgeConfigurationOptions;
@@ -42,6 +44,8 @@ export class OcnBridgeComponent implements Component {
     private tokenRepository: OcpiTokenRepository,
     @inject(OCPI_LOCATION_REPOSITORY)
     private locationRepository: OcpiLocationRepository,
+    @inject(OCN_CACHE_METADATA_REPOSITORY)
+    private cacheMetadataRepository: OcnCacheMetadataRepository,
   ) {
     console.info('OcnBridge component is initialized');
 
@@ -62,7 +66,7 @@ export class OcnBridgeComponent implements Component {
           country_code: 'DE',
           party_id: 'FLX',
           role: 'OTHER',
-          business_details: {name: 'FlexHub'},
+          business_details: { name: 'FlexHub' },
         },
       ],
       modules: {
@@ -129,6 +133,13 @@ export class OcnBridgeComponent implements Component {
           await this.locationRepository.createOrUpdate(location);
         }
       }
+
+      // Updating timestamp in cache metadata
+      const metadata = new OcnCacheMetadata();
+      const fixedIDofSingleRecord = 1;
+      metadata.id = fixedIDofSingleRecord;
+      metadata.lastUpdated = new Date().toISOString();
+      await this.cacheMetadataRepository.createOrUpdate(metadata);
     });
     job.start();
   }

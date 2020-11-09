@@ -5,9 +5,9 @@ import {
   getModelSchemaRef,
 } from '@loopback/rest';
 import { IEvse, IGeoLocation } from '@shareandcharge/ocn-bridge';
-import { OCPI_LOCATION_REPOSITORY, OCPI_TOKEN_REPOSITORY, REGISTRY_SERVICE_PROVIDER } from '../keys';
-import {OcpiLocation, OcpiLocationRelations, OcpiToken, OcpiTokenRelations} from '../models';
-import {OcpiLocationRepository, OcpiTokenRepository} from '../repositories';
+import { OCPI_LOCATION_REPOSITORY, OCPI_TOKEN_REPOSITORY, REGISTRY_SERVICE_PROVIDER, OCN_CACHE_METADATA_REPOSITORY } from '../keys';
+import {OcpiLocation, OcpiLocationRelations, OcpiToken, OcpiTokenRelations, OcnCacheMetadata} from '../models';
+import {OcpiLocationRepository, OcpiTokenRepository, OcnCacheMetadataRepository} from '../repositories';
 import { RegistryService } from '../services/registry.service';
 
 interface IEvseBasic {
@@ -29,6 +29,8 @@ export class OcnCachedDataController {
     public ocpiLocationRepository : OcpiLocationRepository,
     @inject(OCPI_TOKEN_REPOSITORY)
     public ocpiTokenRepository : OcpiTokenRepository,
+    @inject(OCN_CACHE_METADATA_REPOSITORY)
+    public ocnCacheMetadataRepository : OcnCacheMetadataRepository,
     @inject(REGISTRY_SERVICE_PROVIDER)
     public registryService : RegistryService
   ) {}
@@ -174,4 +176,23 @@ export class OcnCachedDataController {
     return token ?? undefined
   }
 
+  /**
+   * Get cache metadata
+   */
+  @get('/metadata', {
+    responses: {
+      '200': {
+        description: 'OCN Cache Metadata instance',
+        content: {
+          'application/json': {
+            schema: getModelSchemaRef(OcnCacheMetadata),
+          },
+        },
+      },
+    },
+  })
+  async findMetadata(): Promise<OcnCacheMetadata | undefined> {
+    const metadata = await this.ocnCacheMetadataRepository.getLatest();
+    return metadata ?? undefined
+  }
 }
