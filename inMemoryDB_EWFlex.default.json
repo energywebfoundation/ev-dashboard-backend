@@ -41,6 +41,7 @@
     "OcpiEndpoint": {},
     "OcpiToken": {},
     "OcpiLocation": {},
-    "OcpiSession": {}
+    "OcpiSession": {},
+    "OcnCacheMetadata": {}
   }
 }

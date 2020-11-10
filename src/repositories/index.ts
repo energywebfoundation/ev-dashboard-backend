@@ -18,3 +18,4 @@ export * from './ocpi-location.repository';
 export * from './ocpi-session.repository';
 export * from './ocpi-token.repository';
 export * from './ocn-connection.repository';
+export * from './ocn-cache-metadata.repository';
