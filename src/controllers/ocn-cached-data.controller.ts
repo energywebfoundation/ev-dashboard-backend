@@ -5,25 +5,26 @@ import {
   getModelSchemaRef,
 } from '@loopback/rest';
 import { IEvse, IGeoLocation } from '@shareandcharge/ocn-bridge';
-import { ChargePointModel, chargePointModels } from '../datasources/ev-dashboard/charge-point-models';
+import { HDNode } from '@ethersproject/hdnode'
+import { AssetIdentity, ChargePointModel, chargePointModels } from '../datasources/ev-dashboard/charge-point-models';
 import { VehicleModel, vehicleModels } from '../datasources/ev-dashboard/vehicle-models';
 import { OCPI_LOCATION_REPOSITORY, OCPI_TOKEN_REPOSITORY, REGISTRY_SERVICE_PROVIDER, OCN_CACHE_METADATA_REPOSITORY } from '../keys';
 import { OcpiLocation, OcpiLocationRelations, OcpiToken, OcpiTokenRelations, OcnCacheMetadata } from '../models';
 import { OcpiLocationRepository, OcpiTokenRepository, OcnCacheMetadataRepository } from '../repositories';
 import { RegistryService } from '../services/registry.service';
 
-interface IEvseBasic extends ChargePointModel {
-  id: string;
+interface IEvseBasic extends ChargePointModel, AssetIdentity {
   available: boolean;
   coordinates: IGeoLocation;
   operator: string;
 }
 
-interface IVehicleBasic extends VehicleModel {
-  /** ocpi token uid = vehicle id (VIN) */
-  id: string;
+interface IVehicleBasic extends VehicleModel, AssetIdentity {
   connected: boolean;
+  publicKey: string;
 }
+
+const node = HDNode.fromMnemonic('arrow empty stomach rival anger pottery hotel thing curtain goose embark initial');
 
 export class OcnCachedDataController {
   constructor(
@@ -70,11 +71,14 @@ export class OcnCachedDataController {
 
     const evses: IEvseBasic[] = []
 
-    for (const location of locations) {
-      for (const evse of location.evses ?? []) {
+    for (const [iL, location] of locations.entries()) {
+      for (const [iE, evse] of (location.evses ?? []).entries()) {
+        const publicKey = node.derivePath(`m/44'/60'/0'/${iL}/${iE}`).address;
         if (evse?.evse_id) {
           evses.push({
             id: evse.evse_id,
+            publicKey,
+            serviceEndpoint: `https://innogy.de/${evse.uid}`,
             available: evse.status !== 'CHARGING',
             coordinates: location.coordinates,
             operator: location.operator?.name
@@ -152,9 +156,12 @@ export class OcnCachedDataController {
 
     return tokens.map((token, index) => {
       const vehicleModel = vehicleModels[index%vehicleModels.length]
+      const publicKey = node.derivePath(`m/44'/60'/1'/0/${index}`).address
       return {
         ...vehicleModel,
         id: token.uid,
+        serviceEndpoint: `https://${vehicleModel.brandName.toLowerCase()}.com/vehicle/${token.uid}`,
+        publicKey,
         connected: false
       }
     });
@@ -178,7 +185,7 @@ export class OcnCachedDataController {
   async findVehicleById(
     @param.path.string('id') id: string,
   ): Promise<OcpiToken | undefined> {
-    const token = await this.ocpiTokenRepository.findOne({ where: { contract_id: id } });
+    const token = await this.ocpiTokenRepository.findOne({ where: { uid: id } });
     return token ?? undefined
   }
 
