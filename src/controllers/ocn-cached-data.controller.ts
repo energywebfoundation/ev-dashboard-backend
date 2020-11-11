@@ -5,35 +5,37 @@ import {
   getModelSchemaRef,
 } from '@loopback/rest';
 import { IEvse, IGeoLocation } from '@shareandcharge/ocn-bridge';
+import { ChargePointModel, chargePointModels } from '../datasources/ev-dashboard/charge-point-models';
+import { VehicleModel, vehicleModels } from '../datasources/ev-dashboard/vehicle-models';
 import { OCPI_LOCATION_REPOSITORY, OCPI_TOKEN_REPOSITORY, REGISTRY_SERVICE_PROVIDER, OCN_CACHE_METADATA_REPOSITORY } from '../keys';
-import {OcpiLocation, OcpiLocationRelations, OcpiToken, OcpiTokenRelations, OcnCacheMetadata} from '../models';
-import {OcpiLocationRepository, OcpiTokenRepository, OcnCacheMetadataRepository} from '../repositories';
+import { OcpiLocation, OcpiLocationRelations, OcpiToken, OcpiTokenRelations, OcnCacheMetadata } from '../models';
+import { OcpiLocationRepository, OcpiTokenRepository, OcnCacheMetadataRepository } from '../repositories';
 import { RegistryService } from '../services/registry.service';
 
-interface IEvseBasic {
+interface IEvseBasic extends ChargePointModel {
   id: string;
   available: boolean;
   coordinates: IGeoLocation;
   operator: string;
 }
 
-interface IVehicleBasic {
-  id: string; // ocpi token uid = vehicle id
-  type: string;
+interface IVehicleBasic extends VehicleModel {
+  /** ocpi token uid = vehicle id (VIN) */
+  id: string;
   connected: boolean;
 }
 
 export class OcnCachedDataController {
   constructor(
     @inject(OCPI_LOCATION_REPOSITORY)
-    public ocpiLocationRepository : OcpiLocationRepository,
+    public ocpiLocationRepository: OcpiLocationRepository,
     @inject(OCPI_TOKEN_REPOSITORY)
-    public ocpiTokenRepository : OcpiTokenRepository,
+    public ocpiTokenRepository: OcpiTokenRepository,
     @inject(OCN_CACHE_METADATA_REPOSITORY)
-    public ocnCacheMetadataRepository : OcnCacheMetadataRepository,
+    public ocnCacheMetadataRepository: OcnCacheMetadataRepository,
     @inject(REGISTRY_SERVICE_PROVIDER)
-    public registryService : RegistryService
-  ) {}
+    public registryService: RegistryService
+  ) { }
 
   /**
    * Get list of evses cached from OCN
@@ -65,7 +67,7 @@ export class OcnCachedDataController {
     } else {
       locations = await this.ocpiLocationRepository.find();
     }
-    
+
     const evses: IEvseBasic[] = []
 
     for (const location of locations) {
@@ -75,8 +77,9 @@ export class OcnCachedDataController {
             id: evse.evse_id,
             available: evse.status !== 'CHARGING',
             coordinates: location.coordinates,
-            operator: location.operator?.name 
-              ?? `Unknown operator (${location.country_code}:${location.party_id}})`
+            operator: location.operator?.name
+              ?? `Unknown operator (${location.country_code}:${location.party_id}})`,
+            ...chargePointModels[0]
           })
         }
       }
@@ -147,11 +150,14 @@ export class OcnCachedDataController {
       tokens = await this.ocpiTokenRepository.find();
     }
 
-    return tokens.map(token => ({ 
-      id: token.uid,
-      type: 'Orange Hatchback',
-      connected: false
-    }));
+    return tokens.map((token, index) => {
+      const vehicleModel = vehicleModels[index%vehicleModels.length]
+      return {
+        ...vehicleModel,
+        id: token.uid,
+        connected: false
+      }
+    });
   }
 
   /**
@@ -172,7 +178,7 @@ export class OcnCachedDataController {
   async findVehicleById(
     @param.path.string('id') id: string,
   ): Promise<OcpiToken | undefined> {
-    const token = await this.ocpiTokenRepository.findOne({ where: { contract_id: id }});
+    const token = await this.ocpiTokenRepository.findOne({ where: { contract_id: id } });
     return token ?? undefined
   }
 
