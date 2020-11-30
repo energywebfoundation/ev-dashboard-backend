@@ -1,6 +1,4 @@
 export default {
-  "name": "RegistryContract",
-  "connector": "@gdbc/loopback-connector-contract-web3",
   "provider": process.env.EV_REGISTRY_PROVIDER || "https://volta-internal-archive.energyweb.org/",
   "address": process.env.EV_REGISTRY_ADDRESS || "0x8d80504617eB17816b91610Fb2a0274Dc70f193f",
   "abi": [
@@ -168,12 +166,5 @@ export default {
       "stateMutability": "view",
       "type": "function"
     }
-  ],
-  "options": {
-    "defaultAccount": "0xf50E5F1B015320eA525658c71160a36A3A889F82"
-  },
-  "mnemonic": {
-    "method": "raw",
-    "value": "napkin yard space want motion impact rebel shock mango text actress beef"
-  }
+  ]
 }
