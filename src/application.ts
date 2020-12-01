@@ -22,6 +22,7 @@ import {
   OCPI_LOCATION_REPOSITORY,
   OCPI_TOKEN_REPOSITORY,
   OCN_CACHE_METADATA_REPOSITORY,
+  OCN_ASSET_METADATA_REPOSITORY,
 } from './keys';
 import {MerkleRootService} from './services';
 import {MerkleRootContractProvider} from './providers/merkle-root-contract.provider';
@@ -35,6 +36,7 @@ import {
   OcpiLocationRepository,
   OcpiTokenRepository,
   OcnCacheMetadataRepository,
+  OcnAssetMetadataRepository,
 } from './repositories';
 import {EWFlexApplicationConfig} from './models/interfaces';
 import { RegistryService } from './services/registry.service';
@@ -88,6 +90,9 @@ export class EwFlexApplication extends BootMixin(
         .inScope(BindingScope.SINGLETON);
       this.bind(OCN_CACHE_METADATA_REPOSITORY)
         .toClass(OcnCacheMetadataRepository)
+        .inScope(BindingScope.SINGLETON);
+      this.bind(OCN_ASSET_METADATA_REPOSITORY)
+        .toClass(OcnAssetMetadataRepository)
         .inScope(BindingScope.SINGLETON);
       this.bind(EV_REGISTRY_CONTRACT_PROVIDER)
         .toClass(EvRegistryContractProvider);

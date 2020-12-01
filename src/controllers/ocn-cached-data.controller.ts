@@ -5,12 +5,11 @@ import {
   getModelSchemaRef,
 } from '@loopback/rest';
 import { IEvse, IGeoLocation } from '@shareandcharge/ocn-bridge';
-import { HDNode } from '@ethersproject/hdnode'
 import { AssetIdentity, ChargePointModel, chargePointModels } from '../datasources/ev-dashboard/charge-point-models';
 import { VehicleModel, vehicleModels } from '../datasources/ev-dashboard/vehicle-models';
-import { OCPI_LOCATION_REPOSITORY, OCPI_TOKEN_REPOSITORY, REGISTRY_SERVICE_PROVIDER, OCN_CACHE_METADATA_REPOSITORY } from '../keys';
+import { OCPI_LOCATION_REPOSITORY, OCPI_TOKEN_REPOSITORY, REGISTRY_SERVICE_PROVIDER, OCN_CACHE_METADATA_REPOSITORY, OCN_ASSET_METADATA_REPOSITORY } from '../keys';
 import { OcpiLocation, OcpiLocationRelations, OcpiToken, OcpiTokenRelations, OcnCacheMetadata } from '../models';
-import { OcpiLocationRepository, OcpiTokenRepository, OcnCacheMetadataRepository } from '../repositories';
+import { OcpiLocationRepository, OcpiTokenRepository, OcnCacheMetadataRepository, OcnAssetMetadataRepository } from '../repositories';
 import { RegistryService } from '../services/registry.service';
 
 interface IEvseBasic extends ChargePointModel, AssetIdentity {
@@ -21,21 +20,20 @@ interface IEvseBasic extends ChargePointModel, AssetIdentity {
 
 interface IVehicleBasic extends VehicleModel, AssetIdentity {
   connected: boolean;
-  publicKey: string;
 }
-
-const node = HDNode.fromMnemonic('arrow empty stomach rival anger pottery hotel thing curtain goose embark initial');
 
 export class OcnCachedDataController {
   constructor(
     @inject(OCPI_LOCATION_REPOSITORY)
-    public ocpiLocationRepository: OcpiLocationRepository,
+    private ocpiLocationRepository: OcpiLocationRepository,
     @inject(OCPI_TOKEN_REPOSITORY)
-    public ocpiTokenRepository: OcpiTokenRepository,
+    private ocpiTokenRepository: OcpiTokenRepository,
     @inject(OCN_CACHE_METADATA_REPOSITORY)
-    public ocnCacheMetadataRepository: OcnCacheMetadataRepository,
+    private ocnCacheMetadataRepository: OcnCacheMetadataRepository,
+    @inject(OCN_ASSET_METADATA_REPOSITORY)
+    private ocnAssetMetadataRepository: OcnAssetMetadataRepository,
     @inject(REGISTRY_SERVICE_PROVIDER)
-    public registryService: RegistryService
+    private registryService: RegistryService
   ) { }
 
   /**
@@ -71,13 +69,13 @@ export class OcnCachedDataController {
 
     const evses: IEvseBasic[] = []
 
-    for (const [iL, location] of locations.entries()) {
-      for (const [iE, evse] of (location.evses ?? []).entries()) {
-        const publicKey = node.derivePath(`m/44'/60'/0'/${iL}/${iE}`).address;
-        if (evse?.evse_id) {
+    for (const location of locations) {
+      for (const evse of location.evses ?? []) {
+        const asset = await this.ocnAssetMetadataRepository.findOne({ where: { uid: evse.evse_id } });
+        if (evse?.evse_id && asset?.did) {
           evses.push({
             id: evse.evse_id,
-            publicKey,
+            did: asset.did,
             serviceEndpoint: `https://innogy.de/${evse.uid}`,
             available: evse.status !== 'CHARGING',
             coordinates: location.coordinates,
@@ -154,17 +152,23 @@ export class OcnCachedDataController {
       tokens = await this.ocpiTokenRepository.find();
     }
 
-    return tokens.map((token, index) => {
-      const vehicleModel = vehicleModels[index%vehicleModels.length]
-      const publicKey = node.derivePath(`m/44'/60'/1'/0/${index}`).address
-      return {
-        ...vehicleModel,
-        id: token.uid,
-        serviceEndpoint: `https://${vehicleModel.brandName.toLowerCase()}.com/vehicle/${token.uid}`,
-        publicKey,
-        connected: false
+    const vehicles: IVehicleBasic[] = [];
+
+    for (const [index, token] of tokens.entries()) {
+      const vehicleModel = vehicleModels[index % vehicleModels.length]
+      const asset = await this.ocnAssetMetadataRepository.findOne({ where: { uid: token.uid } })
+      if (asset?.did) {
+        vehicles.push({
+          ...vehicleModel,
+          id: token.uid,
+          serviceEndpoint: `https://${vehicleModel.brandName.toLowerCase()}.com/vehicle/${token.uid}`,
+          did: asset?.did,
+          connected: false
+        })
       }
-    });
+    }
+
+    return vehicles;
   }
 
   /**

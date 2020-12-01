@@ -44,7 +44,7 @@ export class RegistryService {
    * 
    * @param uid 
    */
-  async resolveAssetIdentity(uid: string): Promise<{ did: string, userDid: string } | undefined> {
+  async resolveAssetIdentity(uid: string): Promise<{ did: string, operatorDid: string } | undefined> {
     const asset = await this.evRegistry.getDeviceFromIdentifier(uid)
     const emptyAddress = '0x'.padEnd(42, '0')
     if (asset.addr === emptyAddress || asset.user === emptyAddress) {
@@ -55,7 +55,7 @@ export class RegistryService {
     const method = 'ethr'
     return {
       did: `did:${method}:${asset.addr}`,
-      userDid: `did:${method}:${asset.user}`
+      operatorDid: `did:${method}:${asset.user}`
     }
   }
 }

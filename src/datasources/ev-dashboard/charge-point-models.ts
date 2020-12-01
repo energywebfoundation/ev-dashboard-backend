@@ -1,8 +1,8 @@
 export interface AssetIdentity {
     /** identifier: VIN, EVSE ID */
     id: string;
-    /** Address used in DID */
-    publicKey: string;
+    /** DID (assumed erc 1056 method) */
+    did: string;
     /** Location of DID Document's off-chain data */
     serviceEndpoint: string;
 }
