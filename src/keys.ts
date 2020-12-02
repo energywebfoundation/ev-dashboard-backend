@@ -9,6 +9,7 @@ export const OCN_BRIDGE_DB_PROVIDER = 'providers.ocnBridgeDbProvider';
 export const OCPI_LOCATION_REPOSITORY = 'repositories.ocpiLocationRepository';
 export const OCPI_TOKEN_REPOSITORY = 'repositories.ocpiTokenRepository';
 export const OCN_CACHE_METADATA_REPOSITORY = 'repositories.ocnCacheMetadataRepository';
+export const OCN_ASSET_METADATA_REPOSITORY = 'repositories.ocnAssetMetadataRepository';
 export const EV_REGISTRY_CONTRACT_PROVIDER = 'providers.evregistrycontract';
 export const REGISTRY_SERVICE_PROVIDER = 'providers.registryservice';
 

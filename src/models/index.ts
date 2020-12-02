@@ -20,3 +20,4 @@ export * from './ocpi-session.model';
 export * from './ocpi-token.model';
 export * from './ocn-connection.model';
 export * from './ocn-cache-metadata.model';
+export * from './ocn-asset-metadata.model';

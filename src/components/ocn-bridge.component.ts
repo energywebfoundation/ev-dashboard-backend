@@ -16,6 +16,7 @@ import {
   OCPI_TOKEN_REPOSITORY,
   OCN_CACHE_METADATA_REPOSITORY,
   REGISTRY_SERVICE_PROVIDER,
+  OCN_ASSET_METADATA_REPOSITORY,
 } from '../keys';
 import {
   OcnConfig,
@@ -23,8 +24,8 @@ import {
 } from '../models/interfaces/ocn-config.interface';
 import { OcnBridgeApiProvider } from '../providers';
 import { OcnBridgeDbProvider } from '../providers/ocn-bridge-db.provider';
-import { OcnCacheMetadataRepository, OcpiLocationRepository, OcpiTokenRepository } from '../repositories';
-import { OcnCacheMetadata } from '../models';
+import { OcnAssetMetadataRepository, OcnCacheMetadataRepository, OcpiLocationRepository, OcpiTokenRepository } from '../repositories';
+import { OcnAssetMetadata, OcnCacheMetadata } from '../models';
 import { CronJob } from 'cron';
 import { RegistryService } from '../services/registry.service';
 
@@ -45,6 +46,8 @@ export class OcnBridgeComponent implements Component {
     private locationRepository: OcpiLocationRepository,
     @inject(OCN_CACHE_METADATA_REPOSITORY)
     private cacheMetadataRepository: OcnCacheMetadataRepository,
+    @inject(OCN_ASSET_METADATA_REPOSITORY)
+    private assetMetadataRepository: OcnAssetMetadataRepository,
     @inject(REGISTRY_SERVICE_PROVIDER)
     private registryService: RegistryService
   ) {
@@ -123,6 +126,9 @@ export class OcnBridgeComponent implements Component {
             continue
           }
           await this.tokenRepository.createOrUpdate(token);
+          await this.assetMetadataRepository.createOrUpdate(
+            new OcnAssetMetadata({ uid: token.uid, ...asset})
+          );
         }
       }
 
@@ -141,6 +147,7 @@ export class OcnBridgeComponent implements Component {
           }
 
           let canCache = true
+          const assets: OcnAssetMetadata[] = []
           
           for (const evse of location.evses) {
             if (!evse.evse_id) {
@@ -154,11 +161,17 @@ export class OcnBridgeComponent implements Component {
               continue
             }
             canCache = canCache && true
+            assets.push(
+              new OcnAssetMetadata({ uid: evse.evse_id, ...asset })
+            )
           }
           
           // for simplicity, all evses must be registered in a given location
           if (canCache) {
             await this.locationRepository.createOrUpdate(location);
+            for (const asset of assets) {
+              await this.assetMetadataRepository.createOrUpdate(asset)
+            }
           }
         }
       }
