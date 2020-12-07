@@ -18,9 +18,11 @@ import {
   OCN_BRIDGE_DB_PROVIDER,
   OCN_CONFIG,
   REGISTRY_SERVICE_PROVIDER,
+  EV_REGISTRY_CONTRACT_PROVIDER,
   OCPI_LOCATION_REPOSITORY,
   OCPI_TOKEN_REPOSITORY,
   OCN_CACHE_METADATA_REPOSITORY,
+  OCN_ASSET_METADATA_REPOSITORY,
 } from './keys';
 import {MerkleRootService} from './services';
 import {MerkleRootContractProvider} from './providers/merkle-root-contract.provider';
@@ -34,10 +36,11 @@ import {
   OcpiLocationRepository,
   OcpiTokenRepository,
   OcnCacheMetadataRepository,
+  OcnAssetMetadataRepository,
 } from './repositories';
 import {EWFlexApplicationConfig} from './models/interfaces';
 import { RegistryService } from './services/registry.service';
-import { RegistryContractProvider } from './providers/registry-contract.provider';
+import { EvRegistryContractProvider } from './providers/ev-registry-contract.provider';
 
 export class EwFlexApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
@@ -71,25 +74,30 @@ export class EwFlexApplication extends BootMixin(
       this.bind(OCN_CONFIG).to(options.ocn);
       this.dataSource(MemoryDataSource);
       this.bind(OCN_BRIDGE_API_PROVIDER)
-      .toClass(OcnBridgeApiProvider)
-      .inScope(BindingScope.SINGLETON);
+        .toClass(OcnBridgeApiProvider)
+        .inScope(BindingScope.SINGLETON);
       this.bind(OCN_BRIDGE_DB_PROVIDER)
-      .toClass(OcnBridgeDbProvider)
-      .inScope(BindingScope.SINGLETON);
+        .toClass(OcnBridgeDbProvider)
+        .inScope(BindingScope.SINGLETON);
       this.repository(OcnConnectionRepository);
       this.repository(OcpiEndpointRepository);
       this.repository(OcpiSessionRepository);
       this.bind(OCPI_LOCATION_REPOSITORY)
-      .toClass(OcpiLocationRepository)
-      .inScope(BindingScope.SINGLETON);
+        .toClass(OcpiLocationRepository)
+        .inScope(BindingScope.SINGLETON);
       this.bind(OCPI_TOKEN_REPOSITORY)
-      .toClass(OcpiTokenRepository)
-      .inScope(BindingScope.SINGLETON);
+        .toClass(OcpiTokenRepository)
+        .inScope(BindingScope.SINGLETON);
       this.bind(OCN_CACHE_METADATA_REPOSITORY)
-      .toClass(OcnCacheMetadataRepository)
-      .inScope(BindingScope.SINGLETON);
-      this.bind(REGISTRY_SERVICE_PROVIDER).toClass(RegistryService);
-      this.service(RegistryContractProvider);
+        .toClass(OcnCacheMetadataRepository)
+        .inScope(BindingScope.SINGLETON);
+      this.bind(OCN_ASSET_METADATA_REPOSITORY)
+        .toClass(OcnAssetMetadataRepository)
+        .inScope(BindingScope.SINGLETON);
+      this.bind(EV_REGISTRY_CONTRACT_PROVIDER)
+        .toClass(EvRegistryContractProvider);
+      this.bind(REGISTRY_SERVICE_PROVIDER)
+        .toClass(RegistryService);
       this.component(OcnBridgeComponent);
     }
 

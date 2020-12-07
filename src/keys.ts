@@ -1,16 +1,17 @@
 export const WEB3_PROVIDER = 'providers.web3';
 export const MERKLE_ROOT_CONTRACT_PROVIDER = 'providers.merklerootcontract';
 export const MERKLE_ROOT_SERVICE_PROVIDER = 'services.merklerootservice';
-export const REGISTRY_CONTRACT_PROVIDER = 'providers.registrycontract';
-export const REGISTRY_SERVICE_PROVIDER = 'providers.registryservice';
 export const ASSET_ACTIVATION_SERVICE = 'services.assetactivationservice';
+
 export const OCN_CONFIG = 'config.ocn';
 export const OCN_BRIDGE_API_PROVIDER = 'providers.ocnBridgeApiProvider';
 export const OCN_BRIDGE_DB_PROVIDER = 'providers.ocnBridgeDbProvider';
 export const OCPI_LOCATION_REPOSITORY = 'repositories.ocpiLocationRepository';
 export const OCPI_TOKEN_REPOSITORY = 'repositories.ocpiTokenRepository';
 export const OCN_CACHE_METADATA_REPOSITORY = 'repositories.ocnCacheMetadataRepository';
-
+export const OCN_ASSET_METADATA_REPOSITORY = 'repositories.ocnAssetMetadataRepository';
+export const EV_REGISTRY_CONTRACT_PROVIDER = 'providers.evregistrycontract';
+export const REGISTRY_SERVICE_PROVIDER = 'providers.registryservice';
 
 export const enum OFFER_STATE {
   PENDING = 1,

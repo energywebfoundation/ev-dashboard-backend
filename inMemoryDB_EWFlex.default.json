@@ -42,6 +42,7 @@
     "OcpiToken": {},
     "OcpiLocation": {},
     "OcpiSession": {},
-    "OcnCacheMetadata": {}
+    "OcnCacheMetadata": {},
+    "OcnAssetMetadata": {}
   }
 }

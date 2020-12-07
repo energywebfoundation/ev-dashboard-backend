@@ -1,7 +1,5 @@
 import { Component, inject } from '@loopback/core';
-import { repository } from '@loopback/repository';
 import {
-  DefaultRegistry,
   IBridge,
   IBridgeConfigurationOptions,
   ModuleImplementation,
@@ -17,6 +15,8 @@ import {
   OCPI_LOCATION_REPOSITORY,
   OCPI_TOKEN_REPOSITORY,
   OCN_CACHE_METADATA_REPOSITORY,
+  REGISTRY_SERVICE_PROVIDER,
+  OCN_ASSET_METADATA_REPOSITORY,
 } from '../keys';
 import {
   OcnConfig,
@@ -24,15 +24,15 @@ import {
 } from '../models/interfaces/ocn-config.interface';
 import { OcnBridgeApiProvider } from '../providers';
 import { OcnBridgeDbProvider } from '../providers/ocn-bridge-db.provider';
-import { OcnCacheMetadataRepository, OcpiLocationRepository, OcpiTokenRepository } from '../repositories';
-import { OcnCacheMetadata } from '../models';
+import { OcnAssetMetadataRepository, OcnCacheMetadataRepository, OcpiLocationRepository, OcpiTokenRepository } from '../repositories';
+import { OcnAssetMetadata, OcnCacheMetadata } from '../models';
 import { CronJob } from 'cron';
+import { RegistryService } from '../services/registry.service';
 
 export class OcnBridgeComponent implements Component {
   private config: IBridgeConfigurationOptions;
   private msps: IOcpiParty[];
   private cpos: IOcpiParty[];
-  private registry: DefaultRegistry;
   private bridge: IBridge;
   private address: string;
 
@@ -46,13 +46,16 @@ export class OcnBridgeComponent implements Component {
     private locationRepository: OcpiLocationRepository,
     @inject(OCN_CACHE_METADATA_REPOSITORY)
     private cacheMetadataRepository: OcnCacheMetadataRepository,
+    @inject(OCN_ASSET_METADATA_REPOSITORY)
+    private assetMetadataRepository: OcnAssetMetadataRepository,
+    @inject(REGISTRY_SERVICE_PROVIDER)
+    private registryService: RegistryService
   ) {
     console.info('OcnBridge component is initialized');
 
     const config = this.getConfig(partialConfig);
     this.msps = config.msps;
     this.cpos = config.cpos;
-    this.registry = new DefaultRegistry(config.stage, config.identity);
     this.address = new Web3().eth.accounts.privateKeyToAccount(
       config.identity,
     ).address;
@@ -76,7 +79,7 @@ export class OcnBridgeComponent implements Component {
       },
       pluggableAPI: apiProvider.value(),
       pluggableDB: dbProvider.value(),
-      pluggableRegistry: this.registry,
+      pluggableRegistry: this.registryService.ocn,
       logger: true,
       signatures: true, // TODO: fix in bridge; enable
       dryRun: false,
@@ -91,7 +94,7 @@ export class OcnBridgeComponent implements Component {
     console.info('OcnBridge listening on port', this.config.port);
 
     // set the permissions required by flex: to receive forwarded sessions/cdrs
-    const hasSetPermissions = await this.registry.permissions.getService(
+    const hasSetPermissions = await this.registryService.ocn.permissions.getService(
       this.address,
     );
     if (!hasSetPermissions) {
@@ -99,7 +102,7 @@ export class OcnBridgeComponent implements Component {
       // https://bitbucket.org/shareandcharge/ocn-registry/src/develop/Permissions.md
       // 6 = node forwards sessions receiver requests
       const permissions = [6];
-      await this.registry.permissions.setService(name, '', permissions);
+      await this.registryService.ocn.permissions.setService(name, '', permissions);
     }
 
     // TODO: configurable MSP and CPO (define whom and whitelist them)
@@ -117,7 +120,15 @@ export class OcnBridgeComponent implements Component {
           `MSP tokens from OCPI party ${msp.country_code} ${msp.party_id}`,
         );
         for (const token of tokensResponse?.data || []) {
+          const asset = await this.registryService.resolveAssetIdentity(token.uid)
+          // asset must exist in EV Registry
+          if (!asset) {
+            continue
+          }
           await this.tokenRepository.createOrUpdate(token);
+          await this.assetMetadataRepository.createOrUpdate(
+            new OcnAssetMetadata({ uid: token.uid, ...asset})
+          );
         }
       }
 
@@ -130,7 +141,38 @@ export class OcnBridgeComponent implements Component {
           `CPO locations from OCPI party ${cpo.country_code} ${cpo.party_id}`,
         );
         for (const location of locationsResponse?.data || []) {
-          await this.locationRepository.createOrUpdate(location);
+          if (!location.evses) {
+            // skip locations without evses
+            continue
+          }
+
+          let canCache = true
+          const assets: OcnAssetMetadata[] = []
+          
+          for (const evse of location.evses) {
+            if (!evse.evse_id) {
+              // evse_id is the UID - skip if not set (OCPI optional)
+              continue
+            }
+
+            const asset = await this.registryService.resolveAssetIdentity(evse.evse_id)
+            if (!asset) {
+              canCache = canCache && false
+              continue
+            }
+            canCache = canCache && true
+            assets.push(
+              new OcnAssetMetadata({ uid: evse.evse_id, ...asset })
+            )
+          }
+          
+          // for simplicity, all evses must be registered in a given location
+          if (canCache) {
+            await this.locationRepository.createOrUpdate(location);
+            for (const asset of assets) {
+              await this.assetMetadataRepository.createOrUpdate(asset)
+            }
+          }
         }
       }
 
