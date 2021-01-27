@@ -1,16 +1,15 @@
-import {bind} from '@loopback/core';
-import {IPluggableAPI} from '@shareandcharge/ocn-bridge';
-import {ISession} from '@shareandcharge/ocn-bridge';
-import {repository} from '@loopback/repository';
-import {OcpiSessionRepository} from '../repositories';
-import {OCN_BRIDGE_API_PROVIDER} from '../keys';
+import { bind } from '@loopback/core';
+import { repository } from '@loopback/repository';
+import { IPluggableAPI, ISession } from '@energyweb/ocn-bridge';
+import { OcpiSessionRepository } from '../repositories';
+import { OCN_BRIDGE_API_PROVIDER } from '../keys';
 
-@bind.provider({tags: {key: OCN_BRIDGE_API_PROVIDER}})
+@bind.provider({ tags: { key: OCN_BRIDGE_API_PROVIDER } })
 export class OcnBridgeApiProvider {
   constructor(
     @repository(OcpiSessionRepository)
     private sessionRepository: OcpiSessionRepository,
-  ) {}
+  ) { }
 
   value(): IPluggableAPI {
     return {

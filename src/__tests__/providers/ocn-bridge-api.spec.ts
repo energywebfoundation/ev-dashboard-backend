@@ -1,9 +1,9 @@
-import {OcpiSessionRepository} from '../../repositories';
-import {testdb} from '../test.datasource';
-import {assert} from 'chai';
-import {OcnBridgeApiProvider} from '../../providers';
-import {expectedSessionData, expectedCdrData} from './ocn-bridge-api.data';
-import {IPluggableAPI} from '@shareandcharge/ocn-bridge';
+import { OcpiSessionRepository } from '../../repositories';
+import { testdb } from '../test.datasource';
+import { assert } from 'chai';
+import { OcnBridgeApiProvider } from '../../providers';
+import { expectedSessionData } from './ocn-bridge-api.data';
+import { IPluggableAPI } from '@energyweb/ocn-bridge';
 
 describe('OcnBridgeApiProvider', () => {
   let sessionRepo: OcpiSessionRepository;
@@ -26,7 +26,7 @@ describe('OcnBridgeApiProvider', () => {
   it('should create session', async () => {
     await api.sessions?.receiver?.update(expectedSessionData);
     const actual = await sessionRepo.findOne({
-      where: {id: expectedSessionData.id},
+      where: { id: expectedSessionData.id },
     });
     assert.equal(actual?.kwh, expectedSessionData.kwh);
   });
@@ -36,7 +36,7 @@ describe('OcnBridgeApiProvider', () => {
     expectedSessionData.kwh += 0.5;
     await api.sessions?.receiver?.update(expectedSessionData);
     const actual = await sessionRepo.findOne({
-      where: {id: expectedSessionData.id},
+      where: { id: expectedSessionData.id },
     });
     assert.equal(actual?.kwh, expectedSessionData.kwh);
   });

@@ -1,16 +1,14 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from '@loopback/repository';
 import {
+  ICdrToken,
   ICdrLocation,
   ISignedData,
   IChargeDetailRecord,
-} from '@shareandcharge/ocn-bridge/dist/models/ocpi/cdrs';
-import {ITariff} from '@shareandcharge/ocn-bridge/dist/models/ocpi/tariffs';
-import {
-  ICdrToken,
   IChargingPeriod,
   IPrice,
+  ITariff,
   authMethod,
-} from '@shareandcharge/ocn-bridge';
+} from '@energyweb/ocn-bridge';
 
 @model()
 export class OcpiCdr extends Entity implements IChargeDetailRecord {

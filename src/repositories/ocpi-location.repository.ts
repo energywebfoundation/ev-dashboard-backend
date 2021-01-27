@@ -1,14 +1,14 @@
-import {DefaultCrudRepository} from '@loopback/repository';
-import {OcpiLocation, OcpiLocationRelations} from '../models';
-import {MemoryDataSource} from '../datasources';
-import {inject} from '@loopback/core';
-import {ILocation} from '@shareandcharge/ocn-bridge';
+import { DefaultCrudRepository } from '@loopback/repository';
+import { inject } from '@loopback/core';
+import { ILocation } from '@energyweb/ocn-bridge';
+import { OcpiLocation, OcpiLocationRelations } from '../models';
+import { MemoryDataSource } from '../datasources';
 
 export class OcpiLocationRepository extends DefaultCrudRepository<
   OcpiLocation,
   typeof OcpiLocation.prototype._id,
   OcpiLocationRelations
-> {
+  > {
   constructor(@inject('datasources.memory') dataSource: MemoryDataSource) {
     super(OcpiLocation, dataSource);
   }

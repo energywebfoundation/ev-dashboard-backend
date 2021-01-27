@@ -1,5 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
-import {IToken, tokenType} from '@shareandcharge/ocn-bridge';
+import { Entity, model, property } from '@loopback/repository';
+import { IToken, tokenType } from '@energyweb/ocn-bridge';
 
 @model()
 export class OcpiToken extends Entity implements IToken {

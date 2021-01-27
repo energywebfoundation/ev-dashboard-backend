@@ -1,4 +1,4 @@
-import {IOcpiParty} from '@shareandcharge/ocn-bridge';
+import { IOcpiParty } from '@energyweb/ocn-bridge';
 
 export interface PartialOcnConfig {
   enabled: boolean;

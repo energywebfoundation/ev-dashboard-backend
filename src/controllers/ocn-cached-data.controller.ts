@@ -4,7 +4,7 @@ import {
   get,
   getModelSchemaRef,
 } from '@loopback/rest';
-import { IEvse, IGeoLocation } from '@shareandcharge/ocn-bridge';
+import { IEvse, IGeoLocation } from '@energyweb/ocn-bridge';
 import { AssetIdentity, ChargePointModel, chargePointModels } from '../datasources/ev-dashboard/charge-point-models';
 import { VehicleModel, vehicleModels } from '../datasources/ev-dashboard/vehicle-models';
 import { OCPI_LOCATION_REPOSITORY, OCPI_TOKEN_REPOSITORY, REGISTRY_SERVICE_PROVIDER, OCN_CACHE_METADATA_REPOSITORY, OCN_ASSET_METADATA_REPOSITORY } from '../keys';

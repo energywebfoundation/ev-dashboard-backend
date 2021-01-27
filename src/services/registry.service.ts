@@ -1,11 +1,11 @@
 import { Contract } from '@ethersproject/contracts';
-import {bind, ContextTags, inject} from '@loopback/core';
-import { DefaultRegistry, IOcpiParty, IPluggableRegistry } from '@shareandcharge/ocn-bridge';
-import {OCN_CONFIG, EV_REGISTRY_CONTRACT_PROVIDER} from '../keys';
+import { bind, ContextTags, inject } from '@loopback/core';
+import { DefaultRegistry, IOcpiParty } from '@energyweb/ocn-bridge';
+import { OCN_CONFIG, EV_REGISTRY_CONTRACT_PROVIDER } from '../keys';
 import { PartialOcnConfig } from '../models/interfaces';
 import { EvRegistryContractProvider } from '../providers/ev-registry-contract.provider';
 
-@bind({tags: {[ContextTags.NAMESPACE]: 'services'}})
+@bind({ tags: { [ContextTags.NAMESPACE]: 'services' } })
 export class RegistryService {
   public evRegistry: Contract
   public ocn: DefaultRegistry
@@ -24,8 +24,8 @@ export class RegistryService {
   /**
    * Resolves Eth public key (address) to OCPI credentials (party id, country code)
    * using OCN Registry
-   * 
-   * @param address 
+   *
+   * @param address
    */
   async resolveOcnIdentity(address: string): Promise<IOcpiParty> {
     const party = await this.ocn.registry.getPartyByAddress(address);
@@ -41,8 +41,8 @@ export class RegistryService {
   /**
    * Resolves OCPI unique identity (token UID, evse ID) to asset's Eth public key (i.e. DID)
    * using EV Registry
-   * 
-   * @param uid 
+   *
+   * @param uid
    */
   async resolveAssetIdentity(uid: string): Promise<{ did: string, operatorDid: string } | undefined> {
     const asset = await this.evRegistry.getDeviceFromIdentifier(uid)

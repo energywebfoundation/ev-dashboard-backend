@@ -1,14 +1,14 @@
-import {DefaultCrudRepository} from '@loopback/repository';
-import {OcpiToken, OcpiTokenRelations} from '../models';
-import {MemoryDataSource} from '../datasources';
-import {inject} from '@loopback/core';
-import {IToken} from '@shareandcharge/ocn-bridge';
+import { DefaultCrudRepository } from '@loopback/repository';
+import { inject } from '@loopback/core';
+import { IToken } from '@energyweb/ocn-bridge';
+import { OcpiToken, OcpiTokenRelations } from '../models';
+import { MemoryDataSource } from '../datasources';
 
 export class OcpiTokenRepository extends DefaultCrudRepository<
   OcpiToken,
   typeof OcpiToken.prototype._id,
   OcpiTokenRelations
-> {
+  > {
   constructor(@inject('datasources.memory') dataSource: MemoryDataSource) {
     super(OcpiToken, dataSource);
   }

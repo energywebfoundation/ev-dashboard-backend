@@ -6,7 +6,7 @@ import {
   startBridge,
   stopBridge,
   IOcpiParty,
-} from '@shareandcharge/ocn-bridge';
+} from '@energyweb/ocn-bridge';
 import Web3 from 'web3';
 import {
   OCN_BRIDGE_API_PROVIDER,
@@ -127,7 +127,7 @@ export class OcnBridgeComponent implements Component {
           }
           await this.tokenRepository.createOrUpdate(token);
           await this.assetMetadataRepository.createOrUpdate(
-            new OcnAssetMetadata({ uid: token.uid, ...asset})
+            new OcnAssetMetadata({ uid: token.uid, ...asset })
           );
         }
       }
@@ -148,7 +148,7 @@ export class OcnBridgeComponent implements Component {
 
           let canCache = true
           const assets: OcnAssetMetadata[] = []
-          
+
           for (const evse of location.evses) {
             if (!evse.evse_id) {
               // evse_id is the UID - skip if not set (OCPI optional)
@@ -165,7 +165,7 @@ export class OcnBridgeComponent implements Component {
               new OcnAssetMetadata({ uid: evse.evse_id, ...asset })
             )
           }
-          
+
           // for simplicity, all evses must be registered in a given location
           if (canCache) {
             await this.locationRepository.createOrUpdate(location);

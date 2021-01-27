@@ -1,4 +1,4 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from '@loopback/repository';
 import {
   ICdrToken,
   IPrice,
@@ -6,7 +6,7 @@ import {
   ISession,
   authMethod,
   sessionStatus,
-} from '@shareandcharge/ocn-bridge';
+} from '@energyweb/ocn-bridge';
 
 @model()
 export class OcpiSession extends Entity implements ISession {

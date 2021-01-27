@@ -1,5 +1,8 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from '@loopback/repository';
 import {
+  IDisplayText,
+  IBusinessDetails,
+  IImage,
   IGeoLocation,
   IPublishTokenType,
   IAdditionalGeoLocation,
@@ -7,12 +10,7 @@ import {
   IHours,
   IEnergyMix,
   ILocation,
-} from '@shareandcharge/ocn-bridge/dist/models/ocpi/locations';
-import {
-  IDisplayText,
-  IBusinessDetails,
-  IImage,
-} from '@shareandcharge/ocn-bridge/dist/models/ocpi/common';
+} from '@energyweb/ocn-bridge';
 
 @model()
 export class OcpiLocation extends Entity implements ILocation {

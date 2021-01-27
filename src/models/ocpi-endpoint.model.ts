@@ -1,5 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
-import {IEndpoint} from '@shareandcharge/ocn-bridge/dist/models/ocpi/common';
+import { Entity, model, property } from '@loopback/repository';
+import { IEndpoint } from '@energyweb/ocn-bridge';
 
 @model()
 export class OcpiEndpoint extends Entity implements IEndpoint {
