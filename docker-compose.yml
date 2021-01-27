@@ -1,0 +1,54 @@
+version: '3.7'
+services:
+  postgres:
+    image: postgres:10
+    container_name: flex-postgres
+    environment:
+      POSTGRES_DB: ew-flex
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./ew-flex.sql:/docker-entrypoint-initdb.d/init.sql
+
+  redis:
+    image: redis:4.0.5-alpine
+    container_name: flex-redis
+    command: ['redis-server', '--appendonly', 'yes']
+    hostname: redis
+    volumes:
+      - redis-data:/data
+    ports:
+      - 6379:6379
+
+  app:
+    container_name: flex-app
+    build:
+        args:
+          UID: ${UID}
+          GID: ${GID}
+        context: .
+        dockerfile: Dockerfile.dev
+    ports:
+      # webinterface on localhost:8080
+      - 8080:8080
+      # websocket
+      - 8081:8081
+      # ocn bridge
+      - 8090:8090
+      # mqtt
+      - 1883:1883
+    volumes:
+      - type: bind
+        source: .
+        target: /home/node/app
+    environment: 
+      OCN_IDENTITY: 0x_my_private_key
+      OCN_TOKEN_A: my_token_a
+    depends_on:
+      - postgres
+      - redis
+
+volumes:
+  redis-data:

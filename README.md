@@ -7,7 +7,8 @@ This repository is an entrypoint to the different components that are part of th
 This backend is serving the [flex-frontend](https://github.com/energywebfoundation/flex-frontend).
 
 ## Maintainers
-**Primary**: Mani Hagh Sefat (@manihagh)
+- **Primary**: Mani H. (@manihagh)
+- **Secondary**: Adam S. (@adamstaveley)
 
 ## Getting Started
 
@@ -18,24 +19,93 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-Give examples
+NodeJS v10
+NPM v6+
 ```
 
-### Installing
+## DB configuration
 
-A step by step series of examples that tell you how to get a development env running
+Currently 3 type of db configuration is provided
+1. In-memory (default)
+    - configure file are located at src/datasources/memory.datasource.ts
+2. Postgres
+    - configure file are located at sample/datasources/pgsql.datasource.ts && sample/datasources/pgsql.datasource.config.json
+        copy both files to src/datasources/
+3. Redis
+    - configure file are located at sample/datasources/redis.datasource.ts && sample/datasources/redis.datasource.config.json
+        copy both files to src/datasources/
 
-Say what the step will be
+All types of datasource providers require initial data to be setup
+1. In-memory (default)
+    - initial file are located at inMemoryDB_EWFlex.json (needs to be copied from the .default.json file)
+2. Postgres
+    - initial file are located at ew-flex.sql
+3. Redis
+    - initial file are located at redis-based-data.txt
 
-```
-Give the example
+Please import this initial data in respective db source (MemoryDataSource, RedisDataSource, PgsqlDataSource).
+
+Main step to update repository file located in src/repositories with correct datasource 
+
+Set datasource provider example:
+```js
+ constructor(
+    @inject('datasources.memory') dataSource: MemoryDataSource, @repository.getter('OfferRepository') protected offerRepositoryGetter: Getter<OfferRepository>,
+  ) {
+    super(ActivationSummary, dataSource);
+    this.offer = this.createBelongsToAccessorFor('offer', offerRepositoryGetter,);
+    this.registerInclusionResolver('offer', this.offer.inclusionResolver);
+  }
 ```
 
-And repeat
-:
+Available datasources:
+```js
+    - @inject('datasources.memory') dataSource: MemoryDataSource
+    - @inject('datasources.pgsql') dataSource: PgsqlDataSource
+    - @inject('datasources.redis') dataSource: RedisDataSource
 ```
-until finished
+
+## Open Charging Network (OCN) configuration
+
+Flex can be configured to provide an interface to the OCN. This allows it to 
+receive data relating to EVs, EVSEs and charging sessions.
+
+To enable the OCN component, set an `ocn` field in your application config (i.e.
+in `index.js`) to the following:
+```js
+const config = {
+    ocn: {
+        enabled: true
+    }
+}
 ```
+
+The application config should implement the `EWFlexApplicationConfig` interface. 
+All OCN values are required if `ocn.enabled` is set to `true`.
+
+## How to Run
+
+Run `npm i` to install dependencies.
+
+Run `cp inMemoryDB_EWFlex.default.json inMemoryDB_EWFlex.json` to init db
+
+Run `npm run build` to build the project.
+
+Run `npm run start` to start your server. If OCN integration is enabled, set the 
+two environment variables:
+
+- `OCN_IDENTITY`
+- `OCN_TOKEN_A`
+
+Open your browser and navigate to  `http://localhost:8080/`.
+
+## Docker
+
+Docker compose is used for the development environment only. Installing dependencies, watchting for changes and rebuiling the app is taken care of.
+
+Copy `.env.template` to `.env` and set UID and GID accoring to your host system.
+
+Then execute: `docker-compose up --build`
 
 End with an example of getting some data out of the system or using it for a little demo
 

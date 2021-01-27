@@ -1,0 +1,11 @@
+.DS_Store
+node_modules
+dist
+public
+tsconfig.tsbuildinfo
+.idea
+.env
+inMemoryDB_EWFlex.json
+
+deploy_rsa*
+!deploy_rsa.enc

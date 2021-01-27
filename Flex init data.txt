@@ -1,0 +1,12 @@
+docker-compose down
+docker-compose up -d
+docker cp ./ew-flex.sql postgres:/
+docker-compose exec postgres psql -U postgres -d ew-flex -f ew-flex.sql 
+
+## ew-flex start
+npm run clean
+npm run build
+npm run migrate
+npm start
+
+

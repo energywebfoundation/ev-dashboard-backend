@@ -1,0 +1,10 @@
+{
+  "name": "mqtt",
+  "connector": "memory",
+  "host": "127.0.0.1",
+  "port": 1883,
+  "iothost": "127.0.0.1",
+  "iotport": 1883,
+  "didhost": "127.0.0.1",
+  "didport": 1883
+}

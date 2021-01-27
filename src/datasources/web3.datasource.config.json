@@ -1,0 +1,6 @@
+{
+  "name": "Web3",
+  "connector": "@gdbc/loopback-connector-web3",
+  "provider": "https://volta-internal-archive.energyweb.org/",
+  "debug": true
+}

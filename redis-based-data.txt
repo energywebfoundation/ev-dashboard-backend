@@ -1,0 +1,24 @@
+DEL     OfferBundleState:1
+HMSET   OfferBundleState:1 id 1 name Rejected
+DEL     OfferBundleState:2
+HMSET   OfferBundleState:2 id 2 name Reserved
+DEL     OfferBundleState:3
+HMSET   OfferBundleState:3 id 3 name Accepted
+DEL     OfferState:1
+HMSET   OfferState:1 id 1 name Pending claimTypeId 0
+DEL     OfferState:2
+HMSET   OfferState:2 id 2 name 'Pending Confirm' claimTypeId 0
+DEL     OfferState:3
+HMSET   OfferState:3 id 3 name 'Pending Submit' claimTypeId 0
+DEL     OfferState:4
+HMSET   OfferState:4 id 4 name 'Pending Activation' claimTypeId 0
+DEL     OfferState:5
+HMSET   OfferState:5 id 5 name Confirm claimTypeId 0
+DEL     OfferState:6
+HMSET   OfferState:6 id 6 name Reserved claimTypeId 0
+DEL     OfferState:7
+HMSET   OfferState:7 id 7 name Activation claimTypeId 0
+DEL     s:OfferBundleState
+SADD    s:OfferBundleState 1 2 3
+DEL     s:OfferState
+SADD    s:OfferState 1 2 3 4 5 6 7
