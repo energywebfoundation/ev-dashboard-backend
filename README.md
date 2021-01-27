@@ -2,120 +2,52 @@
 
 <short about text>
 
-This repository is an entrypoint to the different components that are part of the Flex suite:
+This repository is the backend for the [EV Dashboard Frontend](https://github.com/energywebfoudnation/ev-dashboard-frontend).
 
-This backend is serving the [flex-frontend](https://github.com/energywebfoundation/flex-frontend).
+This backend is based on the [flex-backend](https://github.com/energywebfoundation/flex-backend).
 
 ## Maintainers
-- **Primary**: Mani H. (@manihagh)
-- **Secondary**: Adam S. (@adamstaveley)
+- **Primary**: Adam S. (@adamstaveley), John H. (@jrhender)
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing
+purposes. See deployment for notes on how to deploy the project on a live system.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+- NodeJS (at least 12 LTS)
+- Docker and docker-compose
 
-```
-NodeJS v10
-NPM v6+
-```
+## Running
+
+See the [PoC repo](https://github.com/energywebfoundation/elia-poc) for docker instructions.
 
 ## DB configuration
 
-Currently 3 type of db configuration is provided
-1. In-memory (default)
-    - configure file are located at src/datasources/memory.datasource.ts
-2. Postgres
-    - configure file are located at sample/datasources/pgsql.datasource.ts && sample/datasources/pgsql.datasource.config.json
-        copy both files to src/datasources/
-3. Redis
-    - configure file are located at sample/datasources/redis.datasource.ts && sample/datasources/redis.datasource.config.json
-        copy both files to src/datasources/
-
-All types of datasource providers require initial data to be setup
-1. In-memory (default)
-    - initial file are located at inMemoryDB_EWFlex.json (needs to be copied from the .default.json file)
-2. Postgres
-    - initial file are located at ew-flex.sql
-3. Redis
-    - initial file are located at redis-based-data.txt
-
-Please import this initial data in respective db source (MemoryDataSource, RedisDataSource, PgsqlDataSource).
-
-Main step to update repository file located in src/repositories with correct datasource 
-
-Set datasource provider example:
-```js
- constructor(
-    @inject('datasources.memory') dataSource: MemoryDataSource, @repository.getter('OfferRepository') protected offerRepositoryGetter: Getter<OfferRepository>,
-  ) {
-    super(ActivationSummary, dataSource);
-    this.offer = this.createBelongsToAccessorFor('offer', offerRepositoryGetter,);
-    this.registerInclusionResolver('offer', this.offer.inclusionResolver);
-  }
-```
-
-Available datasources:
-```js
-    - @inject('datasources.memory') dataSource: MemoryDataSource
-    - @inject('datasources.pgsql') dataSource: PgsqlDataSource
-    - @inject('datasources.redis') dataSource: RedisDataSource
-```
+We use the "in memory" database for now (which is actually persisted in a JSON file). DB configuration is manual,
+requiring modifying the source and therefore needs to be made runtime-configurable. See the
+[Flex backend readme](https://github.com/energywebfoundation/flex-backend) for more on this.
 
 ## Open Charging Network (OCN) configuration
 
-Flex can be configured to provide an interface to the OCN. This allows it to 
+The backend needs to be enable its OCN interface. This allows it to
 receive data relating to EVs, EVSEs and charging sessions.
 
-To enable the OCN component, set an `ocn` field in your application config (i.e.
-in `index.js`) to the following:
-```js
-const config = {
-    ocn: {
-        enabled: true
-    }
-}
-```
+TO enable this, set the env var `OCN_ENABLED=true`.
 
-The application config should implement the `EWFlexApplicationConfig` interface. 
-All OCN values are required if `ocn.enabled` is set to `true`.
-
-## How to Run
-
-Run `npm i` to install dependencies.
-
-Run `cp inMemoryDB_EWFlex.default.json inMemoryDB_EWFlex.json` to init db
-
-Run `npm run build` to build the project.
-
-Run `npm run start` to start your server. If OCN integration is enabled, set the 
-two environment variables:
-
-- `OCN_IDENTITY`
-- `OCN_TOKEN_A`
-
-Open your browser and navigate to  `http://localhost:8080/`.
-
-## Docker
-
-Docker compose is used for the development environment only. Installing dependencies, watchting for changes and rebuiling the app is taken care of.
-
-Copy `.env.template` to `.env` and set UID and GID accoring to your host system.
-
-Then execute: `docker-compose up --build`
-
-End with an example of getting some data out of the system or using it for a little demo
+The application config should implement the `EWFlexApplicationConfig` interface.
+All OCN values are required if `ocn.enabled` is set to `true`. See `./index.js` for the expected env vars.
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of
+conduct, and the process for submitting pull requests to us.
 
 ## License
 
-This project is licensed under the GNU General Public License v3.0 or later - see the [LICENSE](LICENSE) file for details
+This project is licensed under the GNU General Public License v3.0 or later - see the [LICENSE](LICENSE) file for
+details
 
 ## FAQ
 
