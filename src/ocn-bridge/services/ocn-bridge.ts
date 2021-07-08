@@ -26,13 +26,13 @@ export class OcnBridge {
     this.requests = requests;
   }
 
-  @Cron('* * * * *')
-  private async fetchVehicles() {
-    // TODO
-  }
+  // @Cron('* * * * *')
+  // private async fetchVehicles() {
+  //   // TODO
+  // }
 
-  @Cron('* * * * *')
-  private async fetchEvses() {
-    // TODO
-  }
+  // @Cron('* * * * *')
+  // private async fetchEvses() {
+  //   // TODO
+  // }
 }

@@ -22,16 +22,21 @@
   },
   "dependencies": {
     "@energyweb/ocn-bridge": "git+https://github.com/energywebfoundation/ocn-bridge.git#v2",
+    "@ethersproject/wallet": "^5.4.0",
     "@nestjs/common": "^7.6.15",
     "@nestjs/config": "^0.6.3",
     "@nestjs/core": "^7.6.15",
     "@nestjs/platform-express": "^7.6.15",
     "@nestjs/schedule": "^0.4.3",
+    "@nestjs/typeorm": "^8.0.1",
     "@types/cron": "^1.7.2",
     "iam-client-lib": "3.0.0-alpha.16",
+    "joi": "^17.1.0",
+    "pg": "^8.6.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^6.6.6"
+    "rxjs": "^7.2.0",
+    "typeorm": "^0.2.34"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",
