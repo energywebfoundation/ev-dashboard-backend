@@ -1,4 +1,7 @@
 export default () => ({
+  log: {
+    level: process.env.LOG_LEVEL,
+  },
   ocnBridge: {
     port: process.env.OCN_BRIDGE_PORT,
     url: process.env.OCN_BRIDGE_URL,
@@ -17,5 +20,6 @@ export default () => ({
     signatures: process.env.OCN_BRIDGE_SIGNATURES,
     signer: process.env.OCN_BRIDGE_SIGNER,
     tokenA: process.env.OCN_BRIDGE_TOKEN_A,
+    permissions: process.env.OCN_BRIDGE_PERMISSIONS,
   },
 });

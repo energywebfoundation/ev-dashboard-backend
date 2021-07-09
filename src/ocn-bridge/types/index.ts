@@ -14,4 +14,5 @@ export type UserOcnBridgeConfig = {
   dryRun?: string;
   tokenA: string;
   signer: string;
+  permissions: string;
 };

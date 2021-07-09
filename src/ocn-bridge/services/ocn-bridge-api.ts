@@ -1,5 +1,8 @@
 import { IPluggableAPI, ISession } from '@energyweb/ocn-bridge';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Session } from '../schemas/session.schema';
 
 @Injectable()
 export class OcnBridgeApi implements IPluggableAPI {
@@ -7,12 +10,15 @@ export class OcnBridgeApi implements IPluggableAPI {
     receiver: { update: (session: ISession) => Promise<void> };
   };
 
-  constructor() {
+  constructor(
+    @InjectRepository(Session)
+    sessionsRepository: Repository<Session>,
+  ) {
     this.sessions = {
       receiver: {
         update: async (session: ISession) => {
-          // TODO: store in db (append)
           console.log('received session update', session.id);
+          await sessionsRepository.insert(session);
         },
       },
     };

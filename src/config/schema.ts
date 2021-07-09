@@ -2,6 +2,10 @@ import * as Joi from 'joi';
 
 export default () =>
   Joi.object({
+    LOG_LEVEL: Joi.string().default('info'),
+    /**
+     * OCN BRIDGE ENV VARS
+     */
     OCN_BRIDGE_PORT: Joi.number().default(8090),
     OCN_BRIDGE_URL: Joi.string().default('http://localhost:8090'),
     OCN_BRIDGE_NODE_URL: Joi.string().default('http://localhost:8080'),
@@ -17,4 +21,5 @@ export default () =>
       .regex(/(0x)?([0-9a-fA-f]{64})/i)
       .required(),
     OCN_BRIDGE_TOKEN_A: Joi.string().required(),
+    OCN_BRIDGE_PERMISSIONS: Joi.string().required(),
   });

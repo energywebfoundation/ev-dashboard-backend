@@ -5,9 +5,9 @@ export class Auth {
   @PrimaryColumn({ default: 0 })
   id: number; // only one auth object should ever be persisted
 
-  @Column()
+  @Column({ nullable: true })
   tokenB: string;
 
-  @Column()
+  @Column({ nullable: true })
   tokenC: string;
 }

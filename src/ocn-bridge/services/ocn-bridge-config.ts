@@ -4,7 +4,6 @@ import {
   IModules,
   IPluggableAPI,
   IPluggableDB,
-  IPluggableRegistry,
   IRole,
   ModuleImplementation,
 } from '@energyweb/ocn-bridge';
@@ -25,12 +24,13 @@ export class OcnBridgeConfig implements IBridgeConfigurationOptions {
   public readonly roles: IRole[];
   public readonly pluggableAPI: IPluggableAPI;
   public readonly pluggableDB: IPluggableDB;
-  public readonly pluggableRegistry: IPluggableRegistry;
+  public readonly pluggableRegistry: DefaultRegistry;
   public readonly signatures: boolean;
   public readonly dryRun: boolean;
   public readonly logger: boolean;
   public readonly tokenA: string;
   public readonly signer: string;
+  public readonly permissions: number[];
 
   constructor(
     configService: ConfigService,
@@ -58,6 +58,9 @@ export class OcnBridgeConfig implements IBridgeConfigurationOptions {
     this.signatures = parseBool(config.signatures);
     this.dryRun = parseBool(config.dryRun);
     this.logger = parseBool(config.log);
+    this.permissions = config.permissions
+      .split(',')
+      .map((i) => parseInt(i, 10));
     this.signer = config.signer;
     this.tokenA = config.tokenA;
 

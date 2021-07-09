@@ -18,8 +18,8 @@ export class OcnBridgeDb implements IPluggableDB {
    * GET TOKEN_B (our node's authentication token)
    */
   public async getTokenB() {
-    const found = await this.authRepository.findOneOrFail();
-    return found.tokenB;
+    const found = await this.authRepository.findOne();
+    return found?.tokenB ?? '';
   }
 
   /**
@@ -33,8 +33,8 @@ export class OcnBridgeDb implements IPluggableDB {
    * GET TOKEN_C (our authentication token)
    */
   public async getTokenC() {
-    const found = await this.authRepository.findOneOrFail();
-    return found.tokenC;
+    const found = await this.authRepository.findOne();
+    return found?.tokenC ?? '';
   }
 
   /**
@@ -52,11 +52,11 @@ export class OcnBridgeDb implements IPluggableDB {
    * @returns endpoint url
    */
   public async getEndpoint(identifier: string, role: string) {
-    const found = await this.endpointRepository.findOneOrFail({
+    const found = await this.endpointRepository.findOne({
       identifier,
       role,
     });
-    return found.url;
+    return found?.url ?? '';
   }
 
   /**
@@ -70,7 +70,7 @@ export class OcnBridgeDb implements IPluggableDB {
   };
 
   private async updateAuth(update: Partial<Auth>) {
-    const existent = await this.authRepository.findOne();
+    const existent = await this.authRepository.findOne({ id: 0 });
     if (existent) {
       await this.authRepository.update({ id: 0 }, update);
     } else {
