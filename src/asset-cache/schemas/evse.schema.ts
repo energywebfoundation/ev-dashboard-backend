@@ -26,7 +26,7 @@ export class Evse {
   capabilities: string[];
 
   @Column({ type: 'json' })
-  connectors: IConnector;
+  connectors: IConnector[];
 
   @Column({ nullable: true })
   floor_level: string;

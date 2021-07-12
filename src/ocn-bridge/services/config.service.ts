@@ -11,12 +11,13 @@ import { Wallet } from '@ethersproject/wallet';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UserOcnBridgeConfig } from 'src/ocn-bridge/types';
+import { RegistryService } from 'src/registry/services/registry.service';
 import { parseBool } from 'src/utils';
-import { OcnBridgeApi } from './ocn-bridge-api';
-import { OcnBridgeDb } from './ocn-bridge-db';
+import { OcnBridgeApiService } from './api.service';
+import { OcnBridgeDbService } from './db.service';
 
 @Injectable()
-export class OcnBridgeConfig implements IBridgeConfigurationOptions {
+export class OcnBridgeConfigService implements IBridgeConfigurationOptions {
   public readonly port: number;
   public readonly publicBridgeURL: string;
   public readonly ocnNodeURL: string;
@@ -34,8 +35,9 @@ export class OcnBridgeConfig implements IBridgeConfigurationOptions {
 
   constructor(
     configService: ConfigService,
-    api: OcnBridgeApi,
-    db: OcnBridgeDb,
+    api: OcnBridgeApiService,
+    db: OcnBridgeDbService,
+    registry: RegistryService,
   ) {
     const config = configService.get<UserOcnBridgeConfig>('ocnBridge');
     this.port = parseInt(config.port, 10);
@@ -54,7 +56,7 @@ export class OcnBridgeConfig implements IBridgeConfigurationOptions {
     }));
     this.pluggableAPI = api;
     this.pluggableDB = db;
-    this.pluggableRegistry = new DefaultRegistry(config.network, config.signer);
+    this.pluggableRegistry = registry.ocn;
     this.signatures = parseBool(config.signatures);
     this.dryRun = parseBool(config.dryRun);
     this.logger = parseBool(config.log);

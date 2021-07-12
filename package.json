@@ -22,6 +22,8 @@
   },
   "dependencies": {
     "@energyweb/ocn-bridge": "git+https://github.com/energywebfoundation/ocn-bridge.git#v3",
+    "@ethersproject/contracts": "^5.4.0",
+    "@ethersproject/providers": "^5.4.1",
     "@ethersproject/wallet": "^5.4.0",
     "@nestjs/common": "^7.6.15",
     "@nestjs/config": "^0.6.3",
@@ -30,7 +32,8 @@
     "@nestjs/schedule": "^0.4.3",
     "@nestjs/typeorm": "^8.0.1",
     "@types/cron": "^1.7.2",
-    "iam-client-lib": "3.0.0-alpha.16",
+    "axios": "^0.21.1",
+    "iam-client-lib": "3.0.0-alpha.28",
     "joi": "^17.1.0",
     "nest-winston": "^1.5.0",
     "pg": "^8.6.0",

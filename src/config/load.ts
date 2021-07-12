@@ -22,4 +22,8 @@ export default () => ({
     tokenA: process.env.OCN_BRIDGE_TOKEN_A,
     permissions: process.env.OCN_BRIDGE_PERMISSIONS,
   },
+  registry: {
+    provider: process.env.EV_REGISTRY_PROVIDER,
+    address: process.env.EV_REGISTRY_ADDRESS,
+  },
 });

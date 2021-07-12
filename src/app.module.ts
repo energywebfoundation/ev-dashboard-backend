@@ -8,6 +8,8 @@ import loadConfig from './config/load';
 import envValidationSchema from './config/schema';
 import { utilities, WinstonModule } from 'nest-winston';
 import { PartnersModule } from './partners/partners.module';
+import { RegistryModule } from './registry/registry.module';
+import { AssetCacheModule } from './asset-cache/asset-cache.module';
 import * as winston from 'winston';
 
 @Module({
@@ -42,6 +44,8 @@ import * as winston from 'winston';
     }),
     OcnBridgeModule,
     PartnersModule,
+    RegistryModule,
+    AssetCacheModule,
   ],
 })
 export class AppModule {}

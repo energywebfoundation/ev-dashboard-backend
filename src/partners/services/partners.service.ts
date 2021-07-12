@@ -30,7 +30,7 @@ export class PartnersService {
 
   public async getAll(): Promise<Option<Partner[]>> {
     const some = await this.partnersRepository.find();
-    if (some) {
+    if (some.length) {
       return { some };
     }
     return { none: true };
@@ -38,7 +38,7 @@ export class PartnersService {
 
   public async getMSPs(): Promise<Option<Partner[]>> {
     const some = await this.partnersRepository.find({ type: PartnerType.MSP });
-    if (some) {
+    if (some.length) {
       return { some };
     }
     return { none: true };
@@ -46,7 +46,7 @@ export class PartnersService {
 
   public async getCPOs(): Promise<Option<Partner[]>> {
     const some = await this.partnersRepository.find({ type: PartnerType.CPO });
-    if (some) {
+    if (some.length) {
       return { some };
     }
     return { none: true };
@@ -67,6 +67,7 @@ export class PartnersService {
         countryCode: dto.countryCode,
         partyId: dto.partyId,
         type: dto.type === 'msp' ? PartnerType.MSP : PartnerType.CPO,
+        apiToken: dto.apiToken,
       },
     };
   }

@@ -17,4 +17,7 @@ export class Partner {
     enum: PartnerType,
   })
   type: PartnerType;
+
+  @Column({ nullable: true })
+  apiToken: string;
 }

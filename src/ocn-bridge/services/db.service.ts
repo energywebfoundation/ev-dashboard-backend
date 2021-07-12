@@ -6,7 +6,7 @@ import { Auth } from '../schemas/auth.schema';
 import { Endpoint } from '../schemas/endpoint.schema';
 
 @Injectable()
-export class OcnBridgeDb implements IPluggableDB {
+export class OcnBridgeDbService implements IPluggableDB {
   constructor(
     @InjectRepository(Auth)
     private readonly authRepository: Repository<Auth>,

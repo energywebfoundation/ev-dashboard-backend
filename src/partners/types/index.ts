@@ -7,4 +7,5 @@ export type PartnerDto = {
   countryCode: string;
   partyId: string;
   type: string;
+  apiToken?: string;
 };

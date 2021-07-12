@@ -1,35 +1,36 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WinstonLogger, WinstonModule } from 'nest-winston';
-import { OcnBridgeProvider } from './ocn-bridge.providers';
+import { AssetCacheModule } from 'src/asset-cache/asset-cache.module';
+import { PartnersModule } from 'src/partners/partners.module';
+import { RegistryModule } from 'src/registry/registry.module';
+import { OcnBridgeProvider } from './ocn-bridge.provider';
 import { Auth } from './schemas/auth.schema';
 import { Endpoint } from './schemas/endpoint.schema';
-import { Evse } from './schemas/evse.schema';
-import { Location } from './schemas/location.schema';
-import { Session } from './schemas/session.schema';
-import { Token } from './schemas/token.schema';
-import { OcnBridgeApi } from './services/ocn-bridge-api';
-import { OcnBridgeConfig } from './services/ocn-bridge-config';
-import { OcnBridgeDb } from './services/ocn-bridge-db';
+import { LocationResolverService, TokenResolverService } from './services';
+import { OcnBridgeApiService } from './services/api.service';
+import { OcnBridgeConfigService } from './services/config.service';
+import { OcnBridgeDbService } from './services/db.service';
 
 @Module({
   imports: [
     WinstonModule,
     WinstonLogger,
     ConfigModule,
-    forwardRef(() =>
-      TypeOrmModule.forFeature([
-        Auth,
-        Endpoint,
-        Location,
-        Evse,
-        Token,
-        Session,
-      ]),
-    ),
+    TypeOrmModule.forFeature([Auth, Endpoint]),
+    PartnersModule,
+    RegistryModule,
+    AssetCacheModule,
   ],
   exports: [OcnBridgeProvider],
-  providers: [OcnBridgeProvider, OcnBridgeConfig, OcnBridgeDb, OcnBridgeApi],
+  providers: [
+    OcnBridgeProvider,
+    OcnBridgeConfigService,
+    OcnBridgeDbService,
+    OcnBridgeApiService,
+    LocationResolverService,
+    TokenResolverService,
+  ],
 })
 export class OcnBridgeModule {}

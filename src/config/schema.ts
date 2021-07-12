@@ -22,4 +22,13 @@ export default () =>
       .required(),
     OCN_BRIDGE_TOKEN_A: Joi.string().required(),
     OCN_BRIDGE_PERMISSIONS: Joi.string().required(),
+    /**
+     * EV REGISTRY
+     */
+    EV_REGISTRY_PROVIDER: Joi.string().default(
+      'https://volta-internal-archive.energyweb.org/',
+    ),
+    EV_REGISTRY_ADDRESS: Joi.string().default(
+      '0x8d80504617eB17816b91610Fb2a0274Dc70f193f',
+    ),
   });

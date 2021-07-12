@@ -28,7 +28,7 @@ export class Location {
   publish: boolean;
 
   @Column({ type: 'json', nullable: true })
-  publish_allowed_to: IPublishTokenType;
+  publish_allowed_to: IPublishTokenType[];
 
   @Column({ nullable: true })
   name: string;
@@ -52,7 +52,7 @@ export class Location {
   coordinates: IGeoLocation;
 
   @Column({ type: 'json', nullable: true })
-  related_locations: IAdditionalGeoLocation;
+  related_locations: IAdditionalGeoLocation[];
 
   @Column({ nullable: true })
   parking_type: string;
@@ -60,7 +60,7 @@ export class Location {
   // TODO: one to many evses
 
   @Column({ type: 'json', nullable: true })
-  directions: IDisplayText;
+  directions: IDisplayText[];
 
   @Column({ type: 'json', nullable: true })
   operator: IBusinessDetails;

@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { OcnBridge } from './services/ocn-bridge';
+import { OcnBridge } from './services/ocn-bridge.service';
 
 describe('OcnBridge', () => {
   let provider: OcnBridge;
