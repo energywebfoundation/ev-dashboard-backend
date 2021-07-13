@@ -165,14 +165,16 @@ export class OcnBridge {
   }
 
   private async getTokens(msp: Partner): Promise<Option<IToken[]>> {
+    // note the bridge's request service does not honour DRY_RUN so this can
+    // fail if set to true
     const tokensResponse = await this.requests.getTokens({
       country_code: msp.countryCode,
       party_id: msp.partyId,
     });
     this.logger.log(
-      `OcnBridge received ${
-        tokensResponse.data?.length ?? 0
-      } MSP tokens from OCPI party ${msp.countryCode} ${msp.partyId}`,
+      `Pulled ${tokensResponse.data?.length ?? 0} MSP tokens from OCPI party ${
+        msp.countryCode
+      } ${msp.partyId}`,
       OcnBridge.name,
     );
 
@@ -184,14 +186,16 @@ export class OcnBridge {
 
   private async getLocations(cpo: Partner): Promise<Option<ILocation[]>> {
     try {
+      // note the bridge's request service does not honour DRY_RUN so this can
+      // fail if set to true
       const locationsResponse = await this.requests.getLocations({
         country_code: cpo.countryCode,
         party_id: cpo.partyId,
       });
       this.logger.log(
-        `OcnBridge received
-        ${locationsResponse.data?.length || 0}
-        CPO locations from OCPI party ${cpo.countryCode} ${cpo.partyId}`,
+        `Pulled ${
+          locationsResponse.data?.length || 0
+        } CPO locations from OCPI party ${cpo.countryCode} ${cpo.partyId}`,
         OcnBridge.name,
       );
       if (locationsResponse?.data) {

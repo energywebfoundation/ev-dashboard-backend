@@ -19,8 +19,8 @@ export class RegistryService {
     this.registry = new Contract(address, abi, rpc);
 
     const network = configService.get<string>('ocnBridge.network');
-    const identity = configService.get<string>('ocnBridge.identity');
-    this.ocn = new DefaultRegistry(network, identity);
+    const signer = configService.get<string>('ocnBridge.signer');
+    this.ocn = new DefaultRegistry(network, signer);
   }
 
   /**
