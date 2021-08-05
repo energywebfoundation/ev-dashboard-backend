@@ -20,4 +20,8 @@ export class AssetMetadataService {
       await this.assetMetadataRepository.insert(asset);
     }
   }
+
+  public async findOne(uid: string) {
+    return await this.assetMetadataRepository.findOne({ uid });
+  }
 }

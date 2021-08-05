@@ -8,19 +8,23 @@ import { Token } from '../schemas';
 export class TokenService {
   constructor(
     @InjectRepository(Token)
-    private readonly sessionRepository: Repository<Token>,
+    private readonly tokenRepository: Repository<Token>,
   ) {}
 
   public async createOrUpdate(token: IToken) {
-    const saved = await this.sessionRepository.findOne({
+    const saved = await this.tokenRepository.findOne({
       country_code: token.country_code,
       party_id: token.party_id,
       uid: token.uid,
     });
     if (saved) {
-      await this.sessionRepository.update({ _id: saved._id }, token);
+      await this.tokenRepository.update({ _id: saved._id }, token);
     } else {
-      await this.sessionRepository.insert(token);
+      await this.tokenRepository.insert(token);
     }
+  }
+
+  public async findAll() {
+    return await this.tokenRepository.find();
   }
 }
