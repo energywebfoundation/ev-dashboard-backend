@@ -22,13 +22,14 @@ export class AssetCacheController {
   ) {}
 
   @Get('/vehicles')
-  public async getAllVehicles(): Promise<Vehicle | AssetMetadata[]> {
+  public async getAllVehicles(): Promise<(Vehicle & AssetMetadata)[]> {
     const tokens = await this.tokenService.findAll();
 
-    const vehicles: Vehicle | AssetMetadata[] = [];
+    const vehicles = [];
 
     for (const [, token] of tokens.entries()) {
       const asset = await this.assetMetadataService.findOne(token.uid);
+      // "asset" (and did) being set means that the asset has been added to ev-registry
       if (asset?.did) {
         let vehicle: Vehicle;
         vehicle = await this.vehicleService.findOne(token.uid);
