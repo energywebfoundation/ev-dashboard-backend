@@ -17,6 +17,7 @@ import {
   TokenService,
   VehicleService,
 } from './services';
+import { AssetCacheController } from './asset-cache.controller';
 
 @Module({
   imports: [
@@ -46,5 +47,6 @@ import {
     SessionService,
     VehicleService,
   ],
+  controllers: [AssetCacheController],
 })
 export class AssetCacheModule {}
